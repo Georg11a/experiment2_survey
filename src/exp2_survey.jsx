@@ -11,7 +11,7 @@ const NUM_TRIALS = 4;
 // Q1 claims (updated with "Based on the chart")
 const Q1_CLAIMS = {
   bar: "Based on the chart, the value in 2022 is nearly double the value in 2021.",
-  line: "Based on the chart, South Korea\u2019s GDP per capita increased only slightly from 2010 to 2024.",
+  line: "Based on the chart, South Korea’s GDP per capita increased only slightly from 2010 to 2024.",
   pie: "Based on the chart, Transport is the largest sector.",
   bubble: "Based on the chart, Bruno Mars has more than twice the monthly listeners of Ed Sheeran.",
 };
@@ -20,19 +20,19 @@ const Q1_CLAIMS = {
 const Q2_CONFIG = {
   bar: {
     question: "How much did the value increase from 2021 to 2022?",
-    options: ["<25%", "25\u201350%", "50\u201375%", "75\u2013100%", ">100%"],
+    options: ["<25%", "25–50%", "50–75%", "75–100%", ">100%"],
   },
   line: {
-    question: "How much did South Korea\u2019s GDP per capita increase from 2010 to 2024?",
-    options: ["<10%", "10\u201325%", "25\u201350%", "50\u2013100%", ">100%"],
+    question: "How much did South Korea’s GDP per capita increase from 2010 to 2024?",
+    options: ["<10%", "10–25%", "25–50%", "50–100%", ">100%"],
   },
   pie: {
-    question: "How much larger or smaller is Transport\u2019s share compared to Energy?",
+    question: "How much larger or smaller is Transport’s share compared to Energy?",
     options: ["Much smaller", "Slightly smaller", "About the same", "Slightly larger", "Much larger"],
   },
   bubble: {
-    question: "How much larger is Bruno Mars\u2019s monthly audience than Ed Sheeran\u2019s?",
-    options: ["<1.5\u00d7", "1.5\u20132\u00d7", "2\u20133\u00d7", "3\u20135\u00d7", ">5\u00d7"],
+    question: "How much larger is Bruno Mars’s monthly audience than Ed Sheeran’s?",
+    options: ["<1.5×", "1.5–2×", "2–3×", "3–5×", ">5×"],
   },
 };
 
@@ -58,15 +58,15 @@ const NFC_ITEMS = [
   "I find satisfaction in deliberating hard and for long hours.",
   "I only think as hard as I have to.",
   "I prefer to think about small, daily projects to long-term ones.",
-  "I like tasks that require little thought once I\u2019ve learned them.",
+  "I like tasks that require little thought once I’ve learned them.",
   "The idea of relying on thought to make my way to the top appeals to me.",
   "I really enjoy a task that involves coming up with new solutions to problems.",
-  "Learning new ways to think doesn\u2019t excite me very much.",
+  "Learning new ways to think doesn’t excite me very much.",
   "I prefer my life to be filled with puzzles that I must solve.",
   "The notion of thinking abstractly is appealing to me.",
   "I would prefer a task that is intellectual, difficult, and important to one that is somewhat important but does not require much thought.",
   "I feel relief rather than satisfaction after completing a task that required a lot of mental effort.",
-  "It\u2019s enough for me that something gets the job done; I don\u2019t care how or why it works.",
+  "It’s enough for me that something gets the job done; I don’t care how or why it works.",
   "I usually end up deliberating about issues even when they do not affect me personally.",
 ];
 const NFC_SCALE = [
@@ -94,8 +94,8 @@ const VLAT_ITEMS = [
   {
     id: 3, image: "vlat-6.png", type: "histogram",
     question: "What distance have customers traveled the most?",
-    options: ["60\u201370 km", "30\u201340 km", "20\u201330 km", "50\u201360 km"],
-    correct: "30\u201340 km",
+    options: ["60–70 km", "30–40 km", "20–30 km", "50–60 km"],
+    correct: "30–40 km",
   },
   {
     id: 4, image: "vlat-8.png", type: "choropleth",
@@ -183,14 +183,14 @@ function Page({ children }) {
   );
 }
 
-function Nav({ onBack, onNext, nextLabel = "\u2192", nextDisabled = false, showBack = false }) {
+function Nav({ onBack, onNext, nextLabel = "→", nextDisabled = false, showBack = false }) {
   return (
     <div style={{ display: "flex", justifyContent: showBack ? "space-between" : "flex-end", marginTop: 36 }}>
       {showBack && (
         <button onClick={onBack} style={{
           padding: "12px 28px", borderRadius: 6, border: "1px solid #cbd5e0",
           background: "#fff", color: "#4a5568", fontSize: 16, cursor: "pointer",
-        }}>\u2190 Back</button>
+        }}>← Back</button>
       )}
       <button onClick={onNext} disabled={nextDisabled} style={{
         padding: "12px 32px", borderRadius: 6, border: "none",
@@ -272,7 +272,7 @@ function ImageModal({ src, onClose }) {
           border: "none", background: "#f7f8fa", cursor: "pointer",
           fontSize: 18, color: "#718096", marginBottom: 8,
           display: "flex", alignItems: "center", justifyContent: "center",
-        }}>\u2715</button>
+        }}>✕</button>
         <img src={src} alt="Enlarged chart" style={{ maxWidth: "100%", maxHeight: "80vh", borderRadius: 6 }} />
       </div>
     </div>
@@ -286,7 +286,7 @@ function ProgressBar({ trialIdx, pageLabel }) {
         fontSize: 12, color: "#2a8fc1", fontWeight: 700,
         textTransform: "uppercase", letterSpacing: 1,
         background: "#e8f4fb", padding: "4px 10px", borderRadius: 4,
-      }}>Chart {trialIdx + 1} of {NUM_TRIALS} \u2014 {pageLabel}</span>
+      }}>Chart {trialIdx + 1} of {NUM_TRIALS} — {pageLabel}</span>
       <div style={{ display: "flex", gap: 6 }}>
         {[0, 1, 2, 3].map((i) => (
           <div key={i} style={{
@@ -612,12 +612,12 @@ export default function Exp2Survey() {
           maxWidth: 700, margin: "0 auto",
         }}>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: "#1a202c", margin: "0 0 24px" }}>
-            Visualization Perception Study \u2014 Consent
+            Visualization Perception Study — Consent
           </h1>
           <div style={{ color: "#4a5568", lineHeight: 1.7, fontSize: 15, marginBottom: 24 }}>
             <p>Thank you for your interest in this study. You will be shown a series of data visualizations and asked questions about each one. The study takes approximately <strong>15 minutes</strong>.</p>
             <p style={{ marginTop: 12 }}>Your participation is voluntary. You may withdraw at any time without penalty. All data will be stored anonymously using your Prolific ID.</p>
-            <p style={{ marginTop: 12 }}>By clicking <strong>\u201cI Consent\u201d</strong> below, you confirm that you have read and understood this information and agree to participate.</p>
+            <p style={{ marginTop: 12 }}>By clicking <strong>“I Consent”</strong> below, you confirm that you have read and understood this information and agree to participate.</p>
           </div>
           <div style={{ marginBottom: 24 }}>
             <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 14 }}>
@@ -673,19 +673,19 @@ export default function Exp2Survey() {
             marginBottom: 24, borderLeft: "4px solid #e53e3e",
           }}>
             <p style={{ color: "#c53030", fontSize: 14, lineHeight: 1.6, margin: 0, fontWeight: 600 }}>
-              \u26a0\ufe0f Important: There is <strong>no back button</strong>. Once you move to the next page, you cannot return. Please read each question carefully before answering.
+              ⚠️ Important: There is <strong>no back button</strong>. Once you move to the next page, you cannot return. Please read each question carefully before answering.
             </p>
           </div>
           <div style={{ color: "#6b7a8d", fontSize: 15, lineHeight: 1.75 }}>
             <p>After completing all 4 rounds, you will answer a short visualization literacy quiz, then some questions about yourself. The entire study should take approximately <strong>15 minutes</strong>.</p>
           </div>
-          <Nav showBack={false} onNext={() => { startTimer(); next(); }} nextLabel="Begin \u2192" />
+          <Nav showBack={false} onNext={() => { startTimer(); next(); }} nextLabel="Begin →" />
         </div>
       </Page>
     );
   }
 
-  // ── STEPS 2\u201313: Trial pages ──
+  // ── STEPS 2–13: Trial pages ──
   const trialStep = step - 2;
   if (trialStep >= 0 && trialStep < 12) {
     const trialIdx = Math.floor(trialStep / 3);
@@ -713,7 +713,7 @@ export default function Exp2Survey() {
               margin: "12px 0 16px", borderLeft: "4px solid #2a8fc1",
             }}>
               <p style={{ fontSize: 15, color: "#2d3748", fontStyle: "italic", margin: 0 }}>
-                \u201c{Q1_CLAIMS[technique]}\u201d
+                “{Q1_CLAIMS[technique]}”
               </p>
             </div>
             <RadioGroup name={`q1_${trialIdx}`} options={["Yes", "No"]}
@@ -722,7 +722,7 @@ export default function Exp2Survey() {
                 const copy = [...q1Answers]; copy[trialIdx] = val.toLowerCase(); setQ1Answers(copy);
               }} />
             <Nav onNext={() => { stopTimer(trialIdx, "q1"); startTimer(); next(); }}
-              nextLabel="Next \u2192" nextDisabled={!answer} />
+              nextLabel="Next →" nextDisabled={!answer} />
           </div>
         </Page>
       );
@@ -751,7 +751,7 @@ export default function Exp2Survey() {
                 }} />
             </div>
             <Nav onNext={() => { stopTimer(trialIdx, "q2"); startTimer(); next(); }}
-              nextLabel="Next \u2192" nextDisabled={!answer} />
+              nextLabel="Next →" nextDisabled={!answer} />
           </div>
         </Page>
       );
@@ -844,7 +844,7 @@ export default function Exp2Survey() {
             </div>
 
             <Nav onNext={() => { stopTimer(trialIdx, "q3"); if (trialIdx < 3) startTimer(); next(); }}
-              nextLabel={trialIdx < 3 ? "Next Chart \u2192" : "Continue \u2192"} nextDisabled={!canProceed} />
+              nextLabel={trialIdx < 3 ? "Next Chart →" : "Continue →"} nextDisabled={!canProceed} />
           </div>
         </Page>
       );
@@ -936,8 +936,8 @@ export default function Exp2Survey() {
             </label>
             <select value={age} onChange={(e) => setAge(e.target.value)} style={{ ...inputStyle, background: "#fff" }}>
               <option value="">Select...</option>
-              <option>18\u201324</option><option>25\u201334</option><option>35\u201344</option>
-              <option>45\u201354</option><option>55\u201364</option><option>65+</option>
+              <option>18–24</option><option>25–34</option><option>35–44</option>
+              <option>45–54</option><option>55–64</option><option>65+</option>
             </select>
           </div>
 
