@@ -23,7 +23,7 @@ const Q2_CONFIG = {
     question: "How much did the value increase from 2021 to 2022?",
   },
   line: {
-    question: "How much did South Korea’s GDP per capita increase from 2010 to 2024?",
+    question: "How much did Japan’s GDP per capita increase from 2010 to 2024?",
   },
   pie: {
     question: "How much larger or smaller is Transport’s share compared to Energy?",
@@ -750,7 +750,7 @@ export default function Exp2Survey() {
       );
     }
 
-    // Q2
+    // Q2 — 6-point Likert (paper style: A Little ← 1 2 3 4 5 6 → A Lot)
     if (pageIdx === 1) {
       const config = Q2_CONFIG[technique];
       const answer = q2Answers[trialIdx];
@@ -766,31 +766,37 @@ export default function Exp2Survey() {
             <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 16 }}>
               {config.question} <span style={{ color: "#e53e3e" }}>*</span>
             </label>
-            <p style={{ color: "#718096", fontSize: 13, marginTop: 4, fontStyle: "italic" }}>
-              Please give a rough estimate based on your impression (no calculation needed).
-            </p>
-            <div style={{ display: "flex", gap: 6, marginTop: 16 }}>
-              {Q2_LIKERT_LABELS.map((label, li) => (
-                <label key={li} style={{
-                  flex: "1 1 0", textAlign: "center",
-                  padding: "12px 4px", borderRadius: 8,
-                  background: answer === String(li + 1) ? "#e8f4fb" : "#f7f8fa",
-                  border: answer === String(li + 1) ? "2px solid #2a8fc1" : "1px solid #e2e8f0",
-                  cursor: "pointer", fontSize: 14, lineHeight: 1.3,
-                  color: answer === String(li + 1) ? "#2a8fc1" : "#4a5568",
-                  fontWeight: answer === String(li + 1) ? 700 : 400,
-                  transition: "all .15s",
-                }}>
-                  <input type="radio" name={`q2_${trialIdx}`} value={String(li + 1)}
-                    checked={answer === String(li + 1)}
+
+            {/* Anchor labels */}
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20, marginBottom: 4, padding: "0 8px" }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: "#4a5568" }}>A Little</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: "#4a5568" }}>A Lot</span>
+            </div>
+
+            {/* Number labels */}
+            <div style={{ display: "flex", justifyContent: "space-around", padding: "0 8px", marginBottom: 6 }}>
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <span key={n} style={{ fontSize: 14, fontWeight: 600, color: "#2d3748", width: 48, textAlign: "center" }}>{n}</span>
+              ))}
+            </div>
+
+            {/* Radio circles */}
+            <div style={{ display: "flex", justifyContent: "space-around", padding: "0 8px" }}>
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <label key={n} style={{ display: "flex", justifyContent: "center", width: 48, cursor: "pointer" }}>
+                  <input type="radio" name={`q2_${trialIdx}`} value={String(n)}
+                    checked={answer === String(n)}
                     onChange={() => {
-                      const copy = [...q2Answers]; copy[trialIdx] = String(li + 1); setQ2Answers(copy);
+                      const copy = [...q2Answers]; copy[trialIdx] = String(n); setQ2Answers(copy);
                     }}
-                    style={{ display: "none" }} />
-                  {label}
+                    style={{
+                      width: 24, height: 24, accentColor: "#c53030",
+                      cursor: "pointer",
+                    }} />
                 </label>
               ))}
             </div>
+
             <Nav onNext={() => { stopTimer(trialIdx, "q2"); startTimer(); next(); }}
               nextLabel="Next →" nextDisabled={!answer} />
           </div>
