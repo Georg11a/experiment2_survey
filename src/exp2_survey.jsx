@@ -504,7 +504,7 @@ export default function Exp2Survey() {
   const [nfcAnswers, setNfcAnswers] = useState(new Array(18).fill(null));
 
   // Mini-VLAT
-  const vlatOrder = useMemo(() => shuffle([...Array(12).keys()]), []);
+  const vlatOrder = useMemo(() => [...Array(12).keys()], []);
   const [vlatCurrentIdx, setVlatCurrentIdx] = useState(0);
   const [vlatAnswers, setVlatAnswers] = useState(new Array(12).fill(null));
   const [vlatDone, setVlatDone] = useState(false);
@@ -597,9 +597,10 @@ export default function Exp2Survey() {
   // STEP ROUTING
   // 0: Consent, 1: Instructions
   // 2-13: 4 trials x 3 pages
-  // 14: Mini-VLAT
-  // 15: Demographics + NFC
-  // 16: Thank you
+  // 14: NFC-18
+  // 15: Mini-VLAT
+  // 16: Demographics (About You)
+  // 17: Thank you
   // ═══════════════════════════════════════════════════════════
 
   // ── STEP 0: Consent ──
@@ -851,10 +852,52 @@ export default function Exp2Survey() {
     }
   }
 
-  // ── STEP 14: Mini-VLAT ──
+  // ── STEP 14: NFC-18 (own page) ──
   if (step === 14) {
+    const nfcAllFilled = nfcAnswers.every((v) => v !== null);
+
+    return (
+      <Page>
+        <div style={{ maxWidth: 700, margin: "0 auto" }}>
+          <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 6px" }}>Need for Cognition Scale</h2>
+          <p style={{ color: "#718096", fontSize: 15, margin: "0 0 32px" }}>
+            For each statement below, please indicate how characteristic it is of you. <span style={{ color: "#e53e3e" }}>*</span>
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {NFC_ITEMS.map((item, idx) => (
+              <div key={idx}>
+                <div style={{ fontSize: 14, color: "#2d3748", marginBottom: 6 }}>{idx + 1}. {item}</div>
+                <div style={{ display: "flex", gap: 3 }}>
+                  {NFC_SCALE.map((label, li) => (
+                    <label key={li} style={{
+                      flex: 1, textAlign: "center", padding: "6px 2px", borderRadius: 4,
+                      background: nfcAnswers[idx] === li ? "#e8f4fb" : "#f7f8fa",
+                      border: nfcAnswers[idx] === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
+                      cursor: "pointer", fontSize: 11, lineHeight: 1.2,
+                      color: nfcAnswers[idx] === li ? "#2a8fc1" : "#4a5568",
+                      fontWeight: nfcAnswers[idx] === li ? 600 : 400, transition: "all .15s",
+                    }}>
+                      <input type="radio" name={`nfc_${idx}`} value={li}
+                        checked={nfcAnswers[idx] === li}
+                        onChange={() => { const c = [...nfcAnswers]; c[idx] = li; setNfcAnswers(c); }}
+                        style={{ display: "none" }} />
+                      {label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Nav onNext={next} nextLabel="Continue →" nextDisabled={!nfcAllFilled} />
+        </div>
+      </Page>
+    );
+  }
+
+  // ── STEP 15: Mini-VLAT ──
+  if (step === 15) {
     if (vlatDone) {
-      // Auto-advance once done
       next();
       return null;
     }
@@ -918,16 +961,26 @@ export default function Exp2Survey() {
     );
   }
 
-  // ── STEP 15: Demographics + NFC ──
-  if (step === 15) {
-    const nfcAllFilled = nfcAnswers.every((v) => v !== null);
-    const canProceed = age && gender && education && nfcAllFilled;
+  // ── STEP 16: Demographics (About You) ──
+  if (step === 16) {
+    const canProceed = age && gender && education;
 
     return (
       <Page>
         <div style={{ maxWidth: 700, margin: "0 auto" }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 6px" }}>About You</h2>
           <p style={{ color: "#718096", fontSize: 15, margin: "0 0 32px" }}>Almost done! Please answer the following questions.</p>
+
+          {/* Gender */}
+          <div style={{ marginBottom: 28 }}>
+            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
+              Please select your gender. <span style={{ color: "#e53e3e" }}>*</span>
+            </label>
+            <div style={{ marginTop: 8 }}>
+              <RadioGroup name="gender" options={["Male", "Female", "Non-binary", "Prefer not to say"]}
+                value={gender} onChange={setGender} />
+            </div>
+          </div>
 
           {/* Age */}
           <div style={{ marginBottom: 28 }}>
@@ -939,17 +992,6 @@ export default function Exp2Survey() {
               <option>18–24</option><option>25–34</option><option>35–44</option>
               <option>45–54</option><option>55–64</option><option>65+</option>
             </select>
-          </div>
-
-          {/* Gender */}
-          <div style={{ marginBottom: 28 }}>
-            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
-              Please select your gender. <span style={{ color: "#e53e3e" }}>*</span>
-            </label>
-            <div style={{ marginTop: 8 }}>
-              <RadioGroup name="gender" options={["Male", "Female", "Non-binary", "Prefer not to say"]}
-                value={gender} onChange={setGender} />
-            </div>
           </div>
 
           {/* Education */}
@@ -964,41 +1006,6 @@ export default function Exp2Survey() {
             </div>
           </div>
 
-          {/* NFC 18 */}
-          <div style={{ marginBottom: 28 }}>
-            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15, display: "block", marginBottom: 8 }}>
-              Need for Cognition Scale <span style={{ color: "#e53e3e" }}>*</span>
-            </label>
-            <p style={{ color: "#718096", fontSize: 13, marginBottom: 16 }}>
-              For each statement below, please indicate how characteristic it is of you.
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              {NFC_ITEMS.map((item, idx) => (
-                <div key={idx}>
-                  <div style={{ fontSize: 14, color: "#2d3748", marginBottom: 6 }}>{idx + 1}. {item}</div>
-                  <div style={{ display: "flex", gap: 3 }}>
-                    {NFC_SCALE.map((label, li) => (
-                      <label key={li} style={{
-                        flex: 1, textAlign: "center", padding: "6px 2px", borderRadius: 4,
-                        background: nfcAnswers[idx] === li ? "#e8f4fb" : "#f7f8fa",
-                        border: nfcAnswers[idx] === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
-                        cursor: "pointer", fontSize: 11, lineHeight: 1.2,
-                        color: nfcAnswers[idx] === li ? "#2a8fc1" : "#4a5568",
-                        fontWeight: nfcAnswers[idx] === li ? 600 : 400, transition: "all .15s",
-                      }}>
-                        <input type="radio" name={`nfc_${idx}`} value={li}
-                          checked={nfcAnswers[idx] === li}
-                          onChange={() => { const c = [...nfcAnswers]; c[idx] = li; setNfcAnswers(c); }}
-                          style={{ display: "none" }} />
-                        {label}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <Nav onNext={submitToGoogle}
             nextLabel={submitting ? "Submitting..." : "Submit"}
             nextDisabled={!canProceed || submitting} />
@@ -1008,7 +1015,7 @@ export default function Exp2Survey() {
     );
   }
 
-  // ── STEP 16: Thank You ──
+  // ── STEP 17: Thank You ──
   return (
     <Page>
       <div style={{ textAlign: "center", paddingTop: 60, maxWidth: 540, margin: "0 auto" }}>
