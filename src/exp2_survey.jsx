@@ -909,14 +909,14 @@ export default function Exp2Survey() {
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {NFC_ITEMS.map((item, idx) => (
               <div key={idx}>
-                <div style={{ fontSize: 14, color: "#2d3748", marginBottom: 6 }}>{idx + 1}. {item}</div>
-                <div style={{ display: "flex", gap: 3 }}>
+                <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>{idx + 1}. {item}</div>
+                <div style={{ display: "flex", gap: 4 }}>
                   {NFC_SCALE.map((label, li) => (
                     <label key={li} style={{
-                      flex: 1, textAlign: "center", padding: "6px 2px", borderRadius: 4,
+                      flex: 1, textAlign: "center", padding: "10px 4px", borderRadius: 6,
                       background: nfcAnswers[idx] === li ? "#e8f4fb" : "#f7f8fa",
                       border: nfcAnswers[idx] === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
-                      cursor: "pointer", fontSize: 11, lineHeight: 1.2,
+                      cursor: "pointer", fontSize: 13, lineHeight: 1.3,
                       color: nfcAnswers[idx] === li ? "#2a8fc1" : "#4a5568",
                       fontWeight: nfcAnswers[idx] === li ? 600 : 400, transition: "all .15s",
                     }}>
@@ -1014,17 +1014,6 @@ export default function Exp2Survey() {
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 6px" }}>About You</h2>
           <p style={{ color: "#718096", fontSize: 15, margin: "0 0 32px" }}>Almost done! Please answer the following questions.</p>
 
-          {/* Gender */}
-          <div style={{ marginBottom: 28 }}>
-            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
-              Please select your gender. <span style={{ color: "#e53e3e" }}>*</span>
-            </label>
-            <div style={{ marginTop: 8 }}>
-              <RadioGroup name="gender" options={["Male", "Female", "Non-binary", "Prefer not to say"]}
-                value={gender} onChange={setGender} />
-            </div>
-          </div>
-
           {/* Age */}
           <div style={{ marginBottom: 28 }}>
             <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
@@ -1035,6 +1024,17 @@ export default function Exp2Survey() {
               <option>18–24</option><option>25–34</option><option>35–44</option>
               <option>45–54</option><option>55–64</option><option>65+</option>
             </select>
+          </div>
+
+          {/* Gender */}
+          <div style={{ marginBottom: 28 }}>
+            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
+              Please select your gender. <span style={{ color: "#e53e3e" }}>*</span>
+            </label>
+            <div style={{ marginTop: 8 }}>
+              <RadioGroup name="gender" options={["Male", "Female", "Non-binary", "Prefer not to say"]}
+                value={gender} onChange={setGender} />
+            </div>
           </div>
 
           {/* Education */}
