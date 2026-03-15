@@ -286,7 +286,7 @@ function ProgressBar({ trialIdx, pageLabel }) {
         fontSize: 12, color: "#2a8fc1", fontWeight: 700,
         textTransform: "uppercase", letterSpacing: 1,
         background: "#e8f4fb", padding: "4px 10px", borderRadius: 4,
-      }}>Chart {trialIdx + 1} of {NUM_TRIALS} — {pageLabel}</span>
+      }}>Round {trialIdx + 1} — {pageLabel}</span>
       <div style={{ display: "flex", gap: 6 }}>
         {[0, 1, 2, 3].map((i) => (
           <div key={i} style={{
@@ -774,47 +774,20 @@ export default function Exp2Survey() {
       );
     }
 
-    // Q3 — shows honest + deceptive side by side (random left/right)
+    // Q3 — shows same single image as Page 1 and Page 2
     if (pageIdx === 2) {
       const trustVals = trustInventory[trialIdx];
       const allTrustFilled = trustVals.every((v) => v !== null);
       const reflectionFilled = q4Reflection[trialIdx].trim().length > 0;
       const canProceed = allTrustFilled && reflectionFilled;
 
-      const both = getBothImagePaths(trialIdx);
-      const honestLeft = pairOrder[trialIdx];
-      const leftImg = honestLeft ? both.honest : both.deceptive;
-      const rightImg = honestLeft ? both.deceptive : both.honest;
-
       return (
         <Page>
           <ImageModal src={modalImage} onClose={() => setModalImage(null)} />
           <ProgressBar trialIdx={trialIdx} pageLabel="Page 3 of 3" />
 
-          {/* Side-by-side chart display */}
-          <div style={{
-            display: "flex", gap: 16, margin: "24px 0",
-          }}>
-            <div style={{
-              flex: "1 1 0", textAlign: "center",
-              background: "#fafbfc", borderRadius: 10, padding: 16,
-              border: "1px solid #e2e8f0", minWidth: 0,
-            }}>
-              <img src={leftImg} alt="Visualization A" onClick={() => setModalImage(leftImg)}
-                style={{ maxWidth: "100%", maxHeight: 500, borderRadius: 6, cursor: "pointer" }} />
-            </div>
-            <div style={{
-              flex: "1 1 0", textAlign: "center",
-              background: "#fafbfc", borderRadius: 10, padding: 16,
-              border: "1px solid #e2e8f0", minWidth: 0,
-            }}>
-              <img src={rightImg} alt="Visualization B" onClick={() => setModalImage(rightImg)}
-                style={{ maxWidth: "100%", maxHeight: 500, borderRadius: 6, cursor: "pointer" }} />
-            </div>
-          </div>
-          <p style={{ fontSize: 12, color: "#a0aec0", textAlign: "center", marginTop: -8, marginBottom: 16 }}>
-            Click either image to enlarge
-          </p>
+          {/* Same chart as Page 1 and Page 2 */}
+          <ChartDisplay imagePath={imagePath} onEnlarge={() => setModalImage(imagePath)} />
 
           <div style={{
             background: "#fff", borderRadius: 12, padding: "28px 32px",
