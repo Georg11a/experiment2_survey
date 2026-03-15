@@ -534,9 +534,11 @@ export default function Exp2Survey() {
 
   // Submission
   const [submitting, setSubmitting] = useState(false);
+  const [nfcStartTime, setNfcStartTime] = useState(null);
+  const [nfcTotalTime, setNfcTotalTime] = useState(0);
   const [submitError, setSubmitError] = useState(null);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDWTXuzfYMzt0Bnz21wJqznazh5LGpSTztWmuFDteLGF0NwcfYf9_NMcJ7KPlNQy9/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYcHlbuchDlyXWELzuhqkxrB0Iy2p3trT0bSJgdyE0mU33z8hK3rbFWe6UHRjK-06c/exec";
 
   const inputStyle = {
     display: "block", width: "100%", marginTop: 8,
@@ -587,12 +589,13 @@ export default function Exp2Survey() {
       nativeLang: nativeLang === "Other" ? otherLang : nativeLang,
       comments,
       nfcAnswers: nfcAnswers.map((v) => (v !== null ? NFC_SCALE[v] : "")),
+      nfcTotalTime,
       vlatResults: vlatScored, vlatTotal,
       submittedAt: new Date().toISOString(),
     };
   }, [prolificId, styleLevel, integrityPatternIdx, techniqueOrder, getIntegrity, getImagePath,
       q1Answers, q2Answers, trustInventory, q4Reflection, q5Positive, q5Negative,
-      pageTimes, age, gender, education, colorVision, nativeLang, otherLang, comments, nfcAnswers, vlatOrder, vlatAnswers]);
+      pageTimes, age, gender, education, colorVision, nativeLang, otherLang, comments, nfcAnswers, nfcTotalTime, vlatOrder, vlatAnswers]);
 
   const submitToGoogle = async () => {
     setSubmitting(true); setSubmitError(null);
@@ -906,6 +909,7 @@ export default function Exp2Survey() {
 
   // ── STEP 14: NFC-18 (own page) ──
   if (step === 14) {
+    if (!nfcStartTime) setNfcStartTime(Date.now());
     const nfcAllFilled = nfcAnswers.every((v) => v !== null);
 
     return (
@@ -944,7 +948,10 @@ export default function Exp2Survey() {
             ))}
           </div>
 
-          <Nav onNext={next} nextLabel="Continue →" nextDisabled={!nfcAllFilled} />
+          <Nav onNext={() => {
+            if (nfcStartTime) setNfcTotalTime(Math.round((Date.now() - nfcStartTime) / 1000));
+            next();
+          }} nextLabel="Continue →" nextDisabled={!nfcAllFilled} />
         </div>
       </div>
     );
@@ -1162,7 +1169,7 @@ export default function Exp2Survey() {
         <p style={{ color: "#718096", fontSize: 16, lineHeight: 1.6 }}>
           Your responses have been recorded successfully. Please click the button below to return to Prolific and complete your submission.
         </p>
-        <a href="https://app.prolific.com/submissions/complete?cc=PLACEHOLDER" style={{ textDecoration: "none" }}>
+        <a href="https://app.prolific.com/submissions/complete?cc=C187R8XN" style={{ textDecoration: "none" }}>
           <button style={{
             marginTop: 28, padding: "14px 36px", borderRadius: 8, border: "none",
             background: "#2a8fc1", color: "#fff", fontSize: 17, fontWeight: 700,
@@ -1170,7 +1177,7 @@ export default function Exp2Survey() {
           }}>Return to Prolific</button>
         </a>
         <p style={{ color: "#a0aec0", fontSize: 13, lineHeight: 1.6, marginTop: 20 }}>
-          If the button does not work, please copy and paste this completion code into Prolific: <strong style={{ color: "#2d3748" }}>PLACEHOLDER</strong>
+          If the button does not work, please copy and paste this completion code into Prolific: <strong style={{ color: "#2d3748" }}>C187R8XN</strong>
         </p>
         <div style={{
           marginTop: 24, padding: "14px 24px", background: "#f7f8fa",
