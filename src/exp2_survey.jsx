@@ -523,6 +523,7 @@ export default function Exp2Survey() {
   const [vlatCurrentIdx, setVlatCurrentIdx] = useState(0);
   const [vlatAnswers, setVlatAnswers] = useState(new Array(12).fill(null));
   const [vlatDone, setVlatDone] = useState(false);
+  const [vlatStarted, setVlatStarted] = useState(false);
 
   // Submission
   const [submitting, setSubmitting] = useState(false);
@@ -686,10 +687,10 @@ export default function Exp2Survey() {
             </p>
           </div>
           <div style={{
-            background: "#fff5f5", borderRadius: 10, padding: "14px 20px",
-            marginBottom: 24, borderLeft: "4px solid #e53e3e",
+            background: "#fffff0", borderRadius: 10, padding: "14px 20px",
+            marginBottom: 24, borderLeft: "4px solid #d69e2e",
           }}>
-            <p style={{ color: "#c53030", fontSize: 14, lineHeight: 1.6, margin: 0, fontWeight: 600 }}>
+            <p style={{ color: "#744210", fontSize: 14, lineHeight: 1.6, margin: 0, fontWeight: 600 }}>
               ⚠️ Important: There is <strong>no back button</strong>. Once you move to the next page, you cannot return. Please read each question carefully before answering.
             </p>
           </div>
@@ -879,7 +880,7 @@ export default function Exp2Survey() {
           <p style={{ color: "#718096", fontSize: 15, margin: "0 0 32px" }}>
             For each statement below, please indicate how characteristic it is of you. <span style={{ color: "#e53e3e" }}>*</span>
           </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {NFC_ITEMS.map((item, idx) => (
               <div key={idx}>
                 <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>{idx + 1}. {item}</div>
@@ -913,6 +914,35 @@ export default function Exp2Survey() {
 
   // ── STEP 15: Mini-VLAT ──
   if (step === 15) {
+    // Show intro screen before starting VLAT
+    if (!vlatStarted) {
+      return (
+        <Page>
+          <div style={{ maxWidth: 700, margin: "0 auto" }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 12px" }}>
+              Visualization Literacy Quiz
+            </h2>
+            <div style={{ color: "#4a5568", fontSize: 16, lineHeight: 1.75, marginBottom: 24 }}>
+              <p>You will now complete a short quiz that measures your ability to read and interpret charts.</p>
+            </div>
+            <div style={{
+              background: "#f8f9fb", borderRadius: 10, padding: "16px 20px",
+              marginBottom: 24, borderLeft: "4px solid #2a8fc1",
+            }}>
+              <p style={{ color: "#2d3748", fontSize: 15, lineHeight: 1.7, margin: 0 }}>
+                <strong>Instructions:</strong><br />
+                • There are <strong>12 questions</strong>, each with a 25-second time limit.<br />
+                • You will get +1 point for every correct answer.<br />
+                • There is <strong>no penalty</strong> for incorrect or skipped answers.<br />
+                • If you are unsure of the answer, you may skip it.
+              </p>
+            </div>
+            <Nav showBack={false} onNext={() => setVlatStarted(true)} nextLabel="Start Quiz →" />
+          </div>
+        </Page>
+      );
+    }
+
     if (vlatDone) {
       next();
       return null;
