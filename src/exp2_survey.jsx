@@ -514,6 +514,10 @@ export default function Exp2Survey() {
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [education, setEducation] = useState("");
+  const [colorVision, setColorVision] = useState("");
+  const [nativeLang, setNativeLang] = useState("");
+  const [otherLang, setOtherLang] = useState("");
+  const [comments, setComments] = useState("");
 
   // NFC
   const [nfcAnswers, setNfcAnswers] = useState(new Array(18).fill(null));
@@ -576,6 +580,9 @@ export default function Exp2Survey() {
       integrityPatternLabel: INTEGRITY_PATTERNS[integrityPatternIdx].join("+") + " deceptive",
       techniqueOrder: techniqueOrder.join("-"),
       trials, age, gender, education,
+      colorVision,
+      nativeLang: nativeLang === "Other" ? otherLang : nativeLang,
+      comments,
       nfcAnswers: nfcAnswers.map((v) => (v !== null ? NFC_SCALE[v] : "")),
       vlatResults: vlatScored, vlatTotal,
       submittedAt: new Date().toISOString(),
@@ -1009,7 +1016,7 @@ export default function Exp2Survey() {
 
   // ── STEP 16: Demographics (About You) ──
   if (step === 16) {
-    const canProceed = age && gender && education;
+    const canProceed = age && gender && education && colorVision && nativeLang && (nativeLang !== "Other" || otherLang.trim());
 
     return (
       <Page>
@@ -1050,6 +1057,51 @@ export default function Exp2Survey() {
                 options={["High School Diploma / GED", "Associate Degree", "Bachelors Degree", "Masters Degree", "Doctorate Degree"]}
                 value={education} onChange={setEducation} />
             </div>
+          </div>
+
+          {/* Color Vision */}
+          <div style={{ marginBottom: 28 }}>
+            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
+              Do you have any difficulty distinguishing colors (e.g., red vs. green)? <span style={{ color: "#e53e3e" }}>*</span>
+            </label>
+            <div style={{ marginTop: 8 }}>
+              <RadioGroup name="colorVision" options={[
+                "No, I do not have color vision problems",
+                "Yes, I am color-blind (difficulty distinguishing some colors)",
+                "Yes, I have other color vision deficiencies (e.g., color-weak)",
+                "Prefer not to say",
+              ]} value={colorVision} onChange={setColorVision} />
+            </div>
+          </div>
+
+          {/* Native Language */}
+          <div style={{ marginBottom: 28 }}>
+            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
+              What is your native language? <span style={{ color: "#e53e3e" }}>*</span>
+            </label>
+            <select value={nativeLang} onChange={(e) => setNativeLang(e.target.value)} style={{ ...inputStyle, background: "#fff" }}>
+              <option value="">Select...</option>
+              <option value="English">English</option>
+              <option value="Other">Other</option>
+            </select>
+            {nativeLang === "Other" && (
+              <input type="text" placeholder="Please specify your native language"
+                value={otherLang} onChange={(e) => setOtherLang(e.target.value)}
+                style={{ ...inputStyle, marginTop: 10 }}
+                onFocus={(e) => (e.target.style.borderColor = "#2a8fc1")}
+                onBlur={(e) => (e.target.style.borderColor = "#cbd5e0")} />
+            )}
+          </div>
+
+          {/* Comments */}
+          <div style={{ marginBottom: 28 }}>
+            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
+              Please include any additional comments below. (optional)
+            </label>
+            <textarea value={comments} onChange={(e) => setComments(e.target.value)} rows={4}
+              style={{ ...inputStyle, marginTop: 10, resize: "vertical", fontFamily: "inherit" }}
+              onFocus={(e) => (e.target.style.borderColor = "#2a8fc1")}
+              onBlur={(e) => (e.target.style.borderColor = "#cbd5e0")} />
           </div>
 
           <Nav onNext={submitToGoogle}
