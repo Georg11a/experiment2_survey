@@ -473,6 +473,21 @@ export default function Exp2Survey() {
     return `${import.meta.env.BASE_URL}images/${integrity}-${technique}-${styleLevel}.png`;
   }, [techniqueOrder, getIntegrity, styleLevel]);
 
+  // For Page 3: get both honest and deceptive image paths
+  const getBothImagePaths = useCallback((trialIdx) => {
+    const technique = techniqueOrder[trialIdx];
+    const base = `${import.meta.env.BASE_URL}images/`;
+    return {
+      honest: `${base}honest-${technique}-${styleLevel}.png`,
+      deceptive: `${base}deceptive-${technique}-${styleLevel}.png`,
+    };
+  }, [techniqueOrder, styleLevel]);
+
+  // Random left/right order for Page 3 pair display (fixed per trial)
+  const pairOrder = useMemo(() =>
+    [0, 1, 2, 3].map(() => Math.random() < 0.5), []
+  ); // true = honest on left, false = deceptive on left
+
   // Trial responses
   const [q1Answers, setQ1Answers] = useState([null, null, null, null]);
   const [q2Answers, setQ2Answers] = useState([null, null, null, null]);
@@ -529,6 +544,7 @@ export default function Exp2Survey() {
     const trials = techniqueOrder.map((technique, i) => ({
       trial: i + 1, technique, integrity: getIntegrity(technique), styleLevel,
       imagePath: getImagePath(i),
+      page3_honestLeft: pairOrder[i],
       q1_factCheck: q1Answers[i], q2_magnitude: q2Answers[i],
       trust_easy: trustInventory[i][0] !== null ? LIKERT_LABELS[trustInventory[i][0]] : "",
       trust_difficult: trustInventory[i][1] !== null ? LIKERT_LABELS[trustInventory[i][1]] : "",
@@ -758,20 +774,47 @@ export default function Exp2Survey() {
       );
     }
 
-    // Q3 — now shows the chart image at top
+    // Q3 — shows honest + deceptive side by side (random left/right)
     if (pageIdx === 2) {
       const trustVals = trustInventory[trialIdx];
       const allTrustFilled = trustVals.every((v) => v !== null);
       const reflectionFilled = q4Reflection[trialIdx].trim().length > 0;
       const canProceed = allTrustFilled && reflectionFilled;
 
+      const both = getBothImagePaths(trialIdx);
+      const honestLeft = pairOrder[trialIdx];
+      const leftImg = honestLeft ? both.honest : both.deceptive;
+      const rightImg = honestLeft ? both.deceptive : both.honest;
+
       return (
         <Page>
           <ImageModal src={modalImage} onClose={() => setModalImage(null)} />
           <ProgressBar trialIdx={trialIdx} pageLabel="Page 3 of 3" />
 
-          {/* Show chart image on evaluation page too */}
-          <ChartDisplay imagePath={imagePath} onEnlarge={() => setModalImage(imagePath)} />
+          {/* Side-by-side chart display */}
+          <div style={{
+            display: "flex", gap: 16, margin: "24px 0",
+          }}>
+            <div style={{
+              flex: "1 1 0", textAlign: "center",
+              background: "#fafbfc", borderRadius: 10, padding: 16,
+              border: "1px solid #e2e8f0", minWidth: 0,
+            }}>
+              <img src={leftImg} alt="Visualization A" onClick={() => setModalImage(leftImg)}
+                style={{ maxWidth: "100%", maxHeight: 500, borderRadius: 6, cursor: "pointer" }} />
+            </div>
+            <div style={{
+              flex: "1 1 0", textAlign: "center",
+              background: "#fafbfc", borderRadius: 10, padding: 16,
+              border: "1px solid #e2e8f0", minWidth: 0,
+            }}>
+              <img src={rightImg} alt="Visualization B" onClick={() => setModalImage(rightImg)}
+                style={{ maxWidth: "100%", maxHeight: 500, borderRadius: 6, cursor: "pointer" }} />
+            </div>
+          </div>
+          <p style={{ fontSize: 12, color: "#a0aec0", textAlign: "center", marginTop: -8, marginBottom: 16 }}>
+            Click either image to enlarge
+          </p>
 
           <div style={{
             background: "#fff", borderRadius: 12, padding: "28px 32px",
