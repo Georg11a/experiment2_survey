@@ -464,7 +464,7 @@ export default function Exp2Survey() {
   const techniqueOrder = useMemo(() => shuffle([...TECHNIQUES]), []);
 
   const getIntegrity = useCallback((technique) => {
-    return INTEGRITY_PATTERNS[integrityPatternIdx].includes(technique) ? "deceptive" : "honest";
+    return INTEGRITY_PATTERNS[integrityPatternIdx].includes(technique) ? "misleading" : "honest";
   }, [integrityPatternIdx]);
 
   const getImagePath = useCallback((trialIdx) => {
@@ -479,7 +479,7 @@ export default function Exp2Survey() {
     const base = `${import.meta.env.BASE_URL}images/`;
     return {
       honest: `${base}honest-${technique}-${styleLevel}.png`,
-      deceptive: `${base}deceptive-${technique}-${styleLevel}.png`,
+      deceptive: `${base}misleading-${technique}-${styleLevel}.png`,
     };
   }, [techniqueOrder, styleLevel]);
 
