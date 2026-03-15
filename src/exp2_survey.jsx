@@ -536,7 +536,7 @@ export default function Exp2Survey() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDWTXuzfYMzt0Bnz21wJqznazh5LGpSTztWmuFDteLGF0NwcfYf9_NMcJ7KPlNQy9/exec ";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXZjhzayU99o94QFK11XNgCWeQ4I0S8jSJ06RYcKpdJU2yd8m7qknzEfFkDxNgMAi/exec";
 
   const inputStyle = {
     display: "block", width: "100%", marginTop: 8,
