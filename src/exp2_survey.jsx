@@ -11,28 +11,25 @@ const NUM_TRIALS = 4;
 // Q1 claims (updated with "Based on the chart")
 const Q1_CLAIMS = {
   bar: "Based on the chart, the value in 2022 is nearly double the value in 2021.",
-  line: "Based on the chart, South Korea’s GDP per capita increased only slightly from 2010 to 2024.",
+  line: "Based on the chart, Japan's GDP per capita stayed about the same from 2010 to 2024.",
   pie: "Based on the chart, Transport is the largest sector.",
   bubble: "Based on the chart, Bruno Mars has more than twice the monthly listeners of Ed Sheeran.",
 };
 
-// Q2 magnitude questions & options (updated)
+// Q2 magnitude questions — 6-point Likert (1=A Little, 6=A Lot)
+const Q2_LIKERT_LABELS = ["1 — A Little", "2", "3", "4", "5", "6 — A Lot"];
 const Q2_CONFIG = {
   bar: {
     question: "How much did the value increase from 2021 to 2022?",
-    options: ["<25%", "25–50%", "50–75%", "75–100%", ">100%"],
   },
   line: {
     question: "How much did South Korea’s GDP per capita increase from 2010 to 2024?",
-    options: ["<10%", "10–25%", "25–50%", "50–100%", ">100%"],
   },
   pie: {
     question: "How much larger or smaller is Transport’s share compared to Energy?",
-    options: ["Much smaller", "Slightly smaller", "About the same", "Slightly larger", "Much larger"],
   },
   bubble: {
     question: "How much larger is Bruno Mars’s monthly audience than Ed Sheeran’s?",
-    options: ["<1.5×", "1.5–2×", "2–3×", "3–5×", ">5×"],
   },
 };
 
@@ -533,7 +530,7 @@ export default function Exp2Survey() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9i2rn7Y5HTLPNfw-N9weVqBzY14sIKgdyzgBZgV-jjyx0ors98Pd_VlHRUHHYXpLC/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4Af91FJ-sqs6iQS1lF6cqT_uef0XaPkdOqRJnT6msHHiadeABDiyyn84TlghCstkU/exec";
 
   const inputStyle = {
     display: "block", width: "100%", marginTop: 8,
@@ -769,11 +766,30 @@ export default function Exp2Survey() {
             <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 16 }}>
               {config.question} <span style={{ color: "#e53e3e" }}>*</span>
             </label>
-            <div style={{ marginTop: 12 }}>
-              <RadioGroup name={`q2_${trialIdx}`} options={config.options}
-                value={answer || ""} onChange={(val) => {
-                  const copy = [...q2Answers]; copy[trialIdx] = val; setQ2Answers(copy);
-                }} />
+            <p style={{ color: "#718096", fontSize: 13, marginTop: 4, fontStyle: "italic" }}>
+              Please give a rough estimate based on your impression (no calculation needed).
+            </p>
+            <div style={{ display: "flex", gap: 6, marginTop: 16 }}>
+              {Q2_LIKERT_LABELS.map((label, li) => (
+                <label key={li} style={{
+                  flex: "1 1 0", textAlign: "center",
+                  padding: "12px 4px", borderRadius: 8,
+                  background: answer === String(li + 1) ? "#e8f4fb" : "#f7f8fa",
+                  border: answer === String(li + 1) ? "2px solid #2a8fc1" : "1px solid #e2e8f0",
+                  cursor: "pointer", fontSize: 14, lineHeight: 1.3,
+                  color: answer === String(li + 1) ? "#2a8fc1" : "#4a5568",
+                  fontWeight: answer === String(li + 1) ? 700 : 400,
+                  transition: "all .15s",
+                }}>
+                  <input type="radio" name={`q2_${trialIdx}`} value={String(li + 1)}
+                    checked={answer === String(li + 1)}
+                    onChange={() => {
+                      const copy = [...q2Answers]; copy[trialIdx] = String(li + 1); setQ2Answers(copy);
+                    }}
+                    style={{ display: "none" }} />
+                  {label}
+                </label>
+              ))}
             </div>
             <Nav onNext={() => { stopTimer(trialIdx, "q2"); startTimer(); next(); }}
               nextLabel="Next →" nextDisabled={!answer} />
