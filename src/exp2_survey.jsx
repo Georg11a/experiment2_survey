@@ -315,6 +315,7 @@ function VlatQuestion({ item, index, total, onAnswer, onTimeout }) {
   const [selected, setSelected] = useState(null);
   const [timeLeft, setTimeLeft] = useState(25);
   const [answered, setAnswered] = useState(false);
+  const [modalSrc, setModalSrc] = useState(null);
   const timerRef = useRef(null);
   const imgBase = `${import.meta.env.BASE_URL}images/`;
 
@@ -365,6 +366,9 @@ function VlatQuestion({ item, index, total, onAnswer, onTimeout }) {
 
   return (
     <div>
+      {/* Image modal */}
+      <ImageModal src={modalSrc} onClose={() => setModalSrc(null)} />
+
       {/* Timer bar */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
         <span style={{ fontSize: 12, color: "#718096", fontWeight: 600 }}>
@@ -387,7 +391,9 @@ function VlatQuestion({ item, index, total, onAnswer, onTimeout }) {
         padding: 16, border: "1px solid #e2e8f0", marginBottom: 16,
       }}>
         <img src={`${imgBase}${item.image}`} alt={`VLAT ${item.type}`}
-          style={{ maxWidth: "100%", maxHeight: 360, borderRadius: 6 }} />
+          onClick={() => setModalSrc(`${imgBase}${item.image}`)}
+          style={{ maxWidth: "100%", maxHeight: 360, borderRadius: 6, cursor: "pointer" }} />
+        <div style={{ fontSize: 12, color: "#a0aec0", marginTop: 6 }}>Click the image to enlarge</div>
       </div>
 
       {/* Question */}
@@ -904,7 +910,7 @@ export default function Exp2Survey() {
 
     return (
       <Page>
-        <div style={{ maxWidth: 700, margin: "0 auto" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 6px" }}>Need for Cognition Scale</h2>
           <p style={{ color: "#718096", fontSize: 15, margin: "0 0 32px" }}>
             For each statement below, please indicate how characteristic it is of you. <span style={{ color: "#e53e3e" }}>*</span>
@@ -913,10 +919,10 @@ export default function Exp2Survey() {
             {NFC_ITEMS.map((item, idx) => (
               <div key={idx}>
                 <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>{idx + 1}. {item}</div>
-                <div style={{ display: "flex", gap: 4 }}>
+                <div style={{ display: "flex", gap: 6 }}>
                   {NFC_SCALE.map((label, li) => (
                     <label key={li} style={{
-                      flex: 1, textAlign: "center", padding: "10px 4px", borderRadius: 6,
+                      flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 6,
                       background: nfcAnswers[idx] === li ? "#e8f4fb" : "#f7f8fa",
                       border: nfcAnswers[idx] === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
                       cursor: "pointer", fontSize: 13, lineHeight: 1.3,
