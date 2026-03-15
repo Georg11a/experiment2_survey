@@ -909,7 +909,10 @@ export default function Exp2Survey() {
     const nfcAllFilled = nfcAnswers.every((v) => v !== null);
 
     return (
-      <Page>
+      <div style={{
+        maxWidth: 1200, margin: "0 auto", padding: "40px 24px",
+        fontFamily: "'Source Sans 3', 'Segoe UI', system-ui, sans-serif",
+      }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 6px" }}>Need for Cognition Scale</h2>
           <p style={{ color: "#718096", fontSize: 15, margin: "0 0 32px" }}>
@@ -943,7 +946,7 @@ export default function Exp2Survey() {
 
           <Nav onNext={next} nextLabel="Continue →" nextDisabled={!nfcAllFilled} />
         </div>
-      </Page>
+      </div>
     );
   }
 
