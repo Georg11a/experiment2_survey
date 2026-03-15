@@ -536,7 +536,7 @@ export default function Exp2Survey() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXZjhzayU99o94QFK11XNgCWeQ4I0S8jSJ06RYcKpdJU2yd8m7qknzEfFkDxNgMAi/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDWTXuzfYMzt0Bnz21wJqznazh5LGpSTztWmuFDteLGF0NwcfYf9_NMcJ7KPlNQy9/exec";
 
   const inputStyle = {
     display: "block", width: "100%", marginTop: 8,
@@ -592,7 +592,7 @@ export default function Exp2Survey() {
     };
   }, [prolificId, styleLevel, integrityPatternIdx, techniqueOrder, getIntegrity, getImagePath,
       q1Answers, q2Answers, trustInventory, q4Reflection, q5Positive, q5Negative,
-      pageTimes, age, gender, education, nfcAnswers, vlatOrder, vlatAnswers]);
+      pageTimes, age, gender, education, colorVision, nativeLang, otherLang, comments, nfcAnswers, vlatOrder, vlatAnswers]);
 
   const submitToGoogle = async () => {
     setSubmitting(true); setSubmitError(null);
