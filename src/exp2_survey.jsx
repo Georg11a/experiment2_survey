@@ -910,7 +910,7 @@ export default function Exp2Survey() {
 
     return (
       <Page>
-        <div style={{ maxWidth: 1050, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 6px" }}>Need for Cognition Scale</h2>
           <p style={{ color: "#718096", fontSize: 15, margin: "0 0 32px" }}>
             For each statement below, please indicate how characteristic it is of you. <span style={{ color: "#e53e3e" }}>*</span>
@@ -922,7 +922,7 @@ export default function Exp2Survey() {
                 <div style={{ display: "flex", gap: 6 }}>
                   {NFC_SCALE.map((label, li) => (
                     <label key={li} style={{
-                      flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 6,
+                      flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 6, whiteSpace: "nowrap",
                       background: nfcAnswers[idx] === li ? "#e8f4fb" : "#f7f8fa",
                       border: nfcAnswers[idx] === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
                       cursor: "pointer", fontSize: 13, lineHeight: 1.3,
