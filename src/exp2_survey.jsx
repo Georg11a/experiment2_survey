@@ -910,7 +910,7 @@ export default function Exp2Survey() {
 
     return (
       <Page>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1050, margin: "0 auto" }}>
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 6px" }}>Need for Cognition Scale</h2>
           <p style={{ color: "#718096", fontSize: 15, margin: "0 0 32px" }}>
             For each statement below, please indicate how characteristic it is of you. <span style={{ color: "#e53e3e" }}>*</span>
