@@ -550,7 +550,7 @@ export default function Exp2Survey() {
   // NFC attention check (between items 13-14)
   const [nfcAttentionAnswer, setNfcAttentionAnswer] = useState(null);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMLdWlu5RdzsIqgyQ1X1QM5UhL-5d2xyUoVYMr62GwRIWF3zzjxphzdHJxvwHI8W2o/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDWTXuzfYMzt0Bnz21wJqznazh5LGpSTztWmuFDteLGF0NwcfYf9_NMcJ7KPlNQy9/exec";
 
   const inputStyle = {
     display: "block", width: "100%", marginTop: 8,
@@ -761,14 +761,6 @@ export default function Exp2Survey() {
       return (
         <Page>
           <div style={{ textAlign: "center", paddingTop: 60, maxWidth: 540, margin: "0 auto" }}>
-            <div style={{
-              width: 72, height: 72, borderRadius: "50%", background: "#fed7d7",
-              display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px",
-            }}>
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </div>
             <h1 style={{ fontSize: 28, fontWeight: 700, color: "#1a202c", margin: "0 0 12px" }}>
               Thank you for your participation!
             </h1>
@@ -921,8 +913,10 @@ export default function Exp2Survey() {
               ))}
             </div>
 
-            <Nav onNext={() => { stopTimer(trialIdx, "q2"); startTimer(); next(); }}
-              nextLabel="Next →" nextDisabled={!answer || (trialIdx === 3 && attentionCheckAnswer === null)} />
+            {trialIdx !== 3 && (
+              <Nav onNext={() => { stopTimer(trialIdx, "q2"); startTimer(); next(); }}
+                nextLabel="Next →" nextDisabled={!answer} />
+            )}
           </div>
 
           {/* Attention check — only on Round 4 Page 2 */}
@@ -932,7 +926,7 @@ export default function Exp2Survey() {
               boxShadow: "0 1px 4px rgba(0,0,0,.06)", border: "1px solid #e8ecf1", marginTop: 20,
             }}>
               <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 16 }}>
-                To help us ensure data quality, please select <strong>{attentionCheckTarget}</strong> on the scale below. <span style={{ color: "#e53e3e" }}>*</span>
+                Please select <strong>{attentionCheckTarget}</strong> on the scale below. <span style={{ color: "#e53e3e" }}>*</span>
               </label>
 
               {/* Number labels */}
@@ -956,6 +950,9 @@ export default function Exp2Survey() {
                   </label>
                 ))}
               </div>
+
+              <Nav onNext={() => { stopTimer(trialIdx, "q2"); startTimer(); next(); }}
+                nextLabel="Next →" nextDisabled={!answer || attentionCheckAnswer === null} />
             </div>
           )}
         </Page>
@@ -1078,7 +1075,7 @@ export default function Exp2Survey() {
                 {idx === 13 && (
                   <div>
                     <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>
-                      This is an attention check. Please select "Somewhat Uncharacteristic".
+                      Please select "Somewhat Uncharacteristic".
                     </div>
                     <div style={{ display: "flex", gap: 6 }}>
                       {NFC_SCALE.map((label, li) => (
