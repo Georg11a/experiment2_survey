@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import React, { useState, useCallback, useMemo, useEffect, useRef } from "react";
 
 // ═══════════════════════════════════════════════════════════
 // EXPERIMENT 2 — Visualization Deception Study (Updated)
@@ -538,7 +538,19 @@ export default function Exp2Survey() {
   const [nfcTotalTime, setNfcTotalTime] = useState(0);
   const [submitError, setSubmitError] = useState(null);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDWTXuzfYMzt0Bnz21wJqznazh5LGpSTztWmuFDteLGF0NwcfYf9_NMcJ7KPlNQy9/exec";
+  // Comprehension check (after instructions)
+  const [compCheckQ1, setCompCheckQ1] = useState("");
+  const [compCheckQ2, setCompCheckQ2] = useState("");
+  const [compCheckFailed, setCompCheckFailed] = useState(false);
+
+  // Attention check on Round 4 Page 2: random target number 1-6
+  const attentionCheckTarget = useMemo(() => Math.floor(Math.random() * 6) + 1, []);
+  const [attentionCheckAnswer, setAttentionCheckAnswer] = useState(null);
+
+  // NFC attention check (between items 13-14)
+  const [nfcAttentionAnswer, setNfcAttentionAnswer] = useState(null);
+
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMLdWlu5RdzsIqgyQ1X1QM5UhL-5d2xyUoVYMr62GwRIWF3zzjxphzdHJxvwHI8W2o/exec";
 
   const inputStyle = {
     display: "block", width: "100%", marginTop: 8,
@@ -590,12 +602,18 @@ export default function Exp2Survey() {
       comments,
       nfcAnswers: nfcAnswers.map((v) => (v !== null ? NFC_SCALE[v] : "")),
       nfcTotalTime,
+      nfcAttentionAnswer: nfcAttentionAnswer !== null ? NFC_SCALE[nfcAttentionAnswer] : "",
+      nfcAttentionCorrect: nfcAttentionAnswer === 1 ? "Yes" : "No",
+      attentionCheckTarget,
+      attentionCheckAnswer: attentionCheckAnswer || "",
+      attentionCheckCorrect: attentionCheckAnswer === String(attentionCheckTarget) ? "Yes" : "No",
       vlatResults: vlatScored, vlatTotal,
       submittedAt: new Date().toISOString(),
     };
   }, [prolificId, styleLevel, integrityPatternIdx, techniqueOrder, getIntegrity, getImagePath,
       q1Answers, q2Answers, trustInventory, q4Reflection, q5Positive, q5Negative,
-      pageTimes, age, gender, education, colorVision, nativeLang, otherLang, comments, nfcAnswers, nfcTotalTime, vlatOrder, vlatAnswers]);
+      pageTimes, age, gender, education, colorVision, nativeLang, otherLang, comments, nfcAnswers, nfcTotalTime,
+      nfcAttentionAnswer, attentionCheckTarget, attentionCheckAnswer, vlatOrder, vlatAnswers]);
 
   const submitToGoogle = async () => {
     setSubmitting(true); setSubmitError(null);
@@ -625,12 +643,12 @@ export default function Exp2Survey() {
 
   // ═══════════════════════════════════════════════════════════
   // STEP ROUTING
-  // 0: Consent, 1: Instructions
-  // 2-13: 4 trials x 3 pages
-  // 14: NFC-18
-  // 15: Mini-VLAT
-  // 16: Demographics (About You)
-  // 17: Thank you
+  // 0: Consent, 1: Instructions, 2: Comprehension Check
+  // 3-14: 4 trials x 3 pages
+  // 15: NFC-18
+  // 16: Mini-VLAT
+  // 17: Demographics (About You)
+  // 18: Thank you
   // ═══════════════════════════════════════════════════════════
 
   // ── STEP 0: Consent ──
@@ -701,6 +719,14 @@ export default function Exp2Survey() {
           </div>
           <div style={{
             background: "#fffff0", borderRadius: 10, padding: "14px 20px",
+            marginBottom: 16, borderLeft: "4px solid #d69e2e",
+          }}>
+            <p style={{ color: "#744210", fontSize: 14, lineHeight: 1.6, margin: 0, fontWeight: 600 }}>
+              ⚠️ In this study, you will judge what the chart suggests <strong>at first glance</strong>. You do not need to calculate exact values.
+            </p>
+          </div>
+          <div style={{
+            background: "#fffff0", borderRadius: 10, padding: "14px 20px",
             marginBottom: 24, borderLeft: "4px solid #d69e2e",
           }}>
             <p style={{ color: "#744210", fontSize: 14, lineHeight: 1.6, margin: 0, fontWeight: 600 }}>
@@ -710,14 +736,103 @@ export default function Exp2Survey() {
           <div style={{ color: "#6b7a8d", fontSize: 15, lineHeight: 1.75 }}>
             <p>After completing all 4 rounds, you will answer a short visualization literacy quiz, then some questions about yourself. The entire study should take approximately <strong>15 minutes</strong>.</p>
           </div>
-          <Nav showBack={false} onNext={() => { startTimer(); next(); }} nextLabel="Begin →" />
+          <Nav showBack={false} onNext={() => { next(); }} nextLabel="Begin →" />
         </div>
       </Page>
     );
   }
 
-  // ── STEPS 2–13: Trial pages ──
-  const trialStep = step - 2;
+  // ── STEP 2: Comprehension Check ──
+  if (step === 2) {
+    const canCheck = compCheckQ1 && compCheckQ2;
+    const handleCompCheck = () => {
+      const q1Pass = compCheckQ1 === "at_glance";
+      const q2Pass = compCheckQ2 === "yes";
+      if (!q1Pass || !q2Pass) {
+        setCompCheckFailed(true);
+      } else {
+        startTimer();
+        next();
+      }
+    };
+
+    if (compCheckFailed) {
+      // Jump to thank you without submission
+      return (
+        <Page>
+          <div style={{ textAlign: "center", paddingTop: 60, maxWidth: 540, margin: "0 auto" }}>
+            <div style={{
+              width: 72, height: 72, borderRadius: "50%", background: "#fed7d7",
+              display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px",
+            }}>
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </div>
+            <h1 style={{ fontSize: 28, fontWeight: 700, color: "#1a202c", margin: "0 0 12px" }}>
+              Thank you for your participation!
+            </h1>
+            <p style={{ color: "#718096", fontSize: 16, lineHeight: 1.6 }}>
+              Unfortunately, you did not pass the comprehension check. This study requires participants to carefully read the instructions before proceeding. You will not be penalized on Prolific.
+            </p>
+            <a href="https://app.prolific.com/submissions/complete?cc=C187R8XN" style={{ textDecoration: "none" }}>
+              <button style={{
+                marginTop: 28, padding: "14px 36px", borderRadius: 8, border: "none",
+                background: "#2a8fc1", color: "#fff", fontSize: 17, fontWeight: 700,
+                cursor: "pointer", boxShadow: "0 2px 8px rgba(42,143,193,.3)",
+              }}>Return to Prolific</button>
+            </a>
+          </div>
+        </Page>
+      );
+    }
+
+    return (
+      <Page>
+        <div style={{ maxWidth: 700, margin: "0 auto" }}>
+          <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 6px" }}>
+            Quick Comprehension Check
+          </h2>
+          <p style={{ color: "#718096", fontSize: 15, margin: "0 0 28px" }}>
+            Please answer the following questions based on the instructions you just read.
+          </p>
+
+          <div style={{ marginBottom: 28 }}>
+            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
+              1. In this study, how should you judge each chart? <span style={{ color: "#e53e3e" }}>*</span>
+            </label>
+            <div style={{ marginTop: 8 }}>
+              <RadioGroup name="comp_q1"
+                options={[
+                  { value: "at_glance", label: "Based on what the chart suggests at first glance" },
+                  { value: "calculate", label: "By calculating exact values from the chart" },
+                ]}
+                value={compCheckQ1} onChange={setCompCheckQ1} />
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 28 }}>
+            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
+              2. Is there a back button that lets you return to a previous page? <span style={{ color: "#e53e3e" }}>*</span>
+            </label>
+            <div style={{ marginTop: 8 }}>
+              <RadioGroup name="comp_q2"
+                options={[
+                  { value: "yes", label: "No, there is no back button" },
+                  { value: "no", label: "Yes, I can go back to previous pages" },
+                ]}
+                value={compCheckQ2} onChange={setCompCheckQ2} />
+            </div>
+          </div>
+
+          <Nav onNext={handleCompCheck} nextLabel="Continue →" nextDisabled={!canCheck} />
+        </div>
+      </Page>
+    );
+  }
+
+  // ── STEPS 3–14: Trial pages ──
+  const trialStep = step - 3;
   if (trialStep >= 0 && trialStep < 12) {
     const trialIdx = Math.floor(trialStep / 3);
     const pageIdx = trialStep % 3;
@@ -807,8 +922,42 @@ export default function Exp2Survey() {
             </div>
 
             <Nav onNext={() => { stopTimer(trialIdx, "q2"); startTimer(); next(); }}
-              nextLabel="Next →" nextDisabled={!answer} />
+              nextLabel="Next →" nextDisabled={!answer || (trialIdx === 3 && attentionCheckAnswer === null)} />
           </div>
+
+          {/* Attention check — only on Round 4 Page 2 */}
+          {trialIdx === 3 && (
+            <div style={{
+              background: "#fff", borderRadius: 12, padding: "28px 32px",
+              boxShadow: "0 1px 4px rgba(0,0,0,.06)", border: "1px solid #e8ecf1", marginTop: 20,
+            }}>
+              <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 16 }}>
+                To help us ensure data quality, please select <strong>{attentionCheckTarget}</strong> on the scale below. <span style={{ color: "#e53e3e" }}>*</span>
+              </label>
+
+              {/* Number labels */}
+              <div style={{ display: "flex", justifyContent: "space-around", padding: "0 8px", marginTop: 16, marginBottom: 6 }}>
+                {[1, 2, 3, 4, 5, 6].map((n) => (
+                  <span key={n} style={{ fontSize: 14, fontWeight: 600, color: "#2d3748", width: 48, textAlign: "center" }}>{n}</span>
+                ))}
+              </div>
+
+              {/* Radio circles */}
+              <div style={{ display: "flex", justifyContent: "space-around", padding: "0 8px" }}>
+                {[1, 2, 3, 4, 5, 6].map((n) => (
+                  <label key={n} style={{ display: "flex", justifyContent: "center", width: 48, cursor: "pointer" }}>
+                    <input type="radio" name="attention_check" value={String(n)}
+                      checked={attentionCheckAnswer === String(n)}
+                      onChange={() => setAttentionCheckAnswer(String(n))}
+                      style={{
+                        width: 24, height: 24, accentColor: "#2a8fc1",
+                        cursor: "pointer",
+                      }} />
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
         </Page>
       );
     }
@@ -907,10 +1056,10 @@ export default function Exp2Survey() {
     }
   }
 
-  // ── STEP 14: NFC-18 (own page) ──
-  if (step === 14) {
+  // ── STEP 15: NFC-18 (own page) ──
+  if (step === 15) {
     if (!nfcStartTime) setNfcStartTime(Date.now());
-    const nfcAllFilled = nfcAnswers.every((v) => v !== null);
+    const nfcAllFilled = nfcAnswers.every((v) => v !== null) && nfcAttentionAnswer !== null;
 
     return (
       <div style={{
@@ -924,27 +1073,55 @@ export default function Exp2Survey() {
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {NFC_ITEMS.map((item, idx) => (
-              <div key={idx}>
-                <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>{idx + 1}. {item}</div>
-                <div style={{ display: "flex", gap: 6 }}>
-                  {NFC_SCALE.map((label, li) => (
-                    <label key={li} style={{
-                      flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 6, whiteSpace: "nowrap",
-                      background: nfcAnswers[idx] === li ? "#e8f4fb" : "#f7f8fa",
-                      border: nfcAnswers[idx] === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
-                      cursor: "pointer", fontSize: 13, lineHeight: 1.3,
-                      color: nfcAnswers[idx] === li ? "#2a8fc1" : "#4a5568",
-                      fontWeight: nfcAnswers[idx] === li ? 600 : 400, transition: "all .15s",
-                    }}>
-                      <input type="radio" name={`nfc_${idx}`} value={li}
-                        checked={nfcAnswers[idx] === li}
-                        onChange={() => { const c = [...nfcAnswers]; c[idx] = li; setNfcAnswers(c); }}
-                        style={{ display: "none" }} />
-                      {label}
-                    </label>
-                  ))}
+              <React.Fragment key={idx}>
+                {/* Insert attention check between item 13 (idx=12) and item 14 (idx=13) */}
+                {idx === 13 && (
+                  <div>
+                    <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>
+                      This is an attention check. Please select "Somewhat Uncharacteristic".
+                    </div>
+                    <div style={{ display: "flex", gap: 6 }}>
+                      {NFC_SCALE.map((label, li) => (
+                        <label key={li} style={{
+                          flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 6, whiteSpace: "nowrap",
+                          background: nfcAttentionAnswer === li ? "#e8f4fb" : "#f7f8fa",
+                          border: nfcAttentionAnswer === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
+                          cursor: "pointer", fontSize: 13, lineHeight: 1.3,
+                          color: nfcAttentionAnswer === li ? "#2a8fc1" : "#4a5568",
+                          fontWeight: nfcAttentionAnswer === li ? 600 : 400, transition: "all .15s",
+                        }}>
+                          <input type="radio" name="nfc_attention" value={li}
+                            checked={nfcAttentionAnswer === li}
+                            onChange={() => setNfcAttentionAnswer(li)}
+                            style={{ display: "none" }} />
+                          {label}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>{idx + 1}. {item}</div>
+                  <div style={{ display: "flex", gap: 6 }}>
+                    {NFC_SCALE.map((label, li) => (
+                      <label key={li} style={{
+                        flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 6, whiteSpace: "nowrap",
+                        background: nfcAnswers[idx] === li ? "#e8f4fb" : "#f7f8fa",
+                        border: nfcAnswers[idx] === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
+                        cursor: "pointer", fontSize: 13, lineHeight: 1.3,
+                        color: nfcAnswers[idx] === li ? "#2a8fc1" : "#4a5568",
+                        fontWeight: nfcAnswers[idx] === li ? 600 : 400, transition: "all .15s",
+                      }}>
+                        <input type="radio" name={`nfc_${idx}`} value={li}
+                          checked={nfcAnswers[idx] === li}
+                          onChange={() => { const c = [...nfcAnswers]; c[idx] = li; setNfcAnswers(c); }}
+                          style={{ display: "none" }} />
+                        {label}
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </React.Fragment>
             ))}
           </div>
 
@@ -957,8 +1134,8 @@ export default function Exp2Survey() {
     );
   }
 
-  // ── STEP 15: Mini-VLAT ──
-  if (step === 15) {
+  // ── STEP 16: Mini-VLAT ──
+  if (step === 16) {
     // Show intro screen before starting VLAT
     if (!vlatStarted) {
       return (
@@ -1052,8 +1229,8 @@ export default function Exp2Survey() {
     );
   }
 
-  // ── STEP 16: Demographics (About You) ──
-  if (step === 16) {
+  // ── STEP 17: Demographics (About You) ──
+  if (step === 17) {
     const canProceed = age && gender && education && colorVision && nativeLang && (nativeLang !== "Other" || otherLang.trim());
 
     return (
@@ -1151,7 +1328,7 @@ export default function Exp2Survey() {
     );
   }
 
-  // ── STEP 17: Thank You ──
+  // ── STEP 18: Thank You ──
   return (
     <Page>
       <div style={{ textAlign: "center", paddingTop: 60, maxWidth: 540, margin: "0 auto" }}>
