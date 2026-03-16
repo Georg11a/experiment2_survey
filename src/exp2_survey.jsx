@@ -5,7 +5,7 @@ import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 // ═══════════════════════════════════════════════════════════
 
 const TECHNIQUES = ["bar", "line", "pie", "bubble"];
-const STYLE_LEVELS = [1, 3, 5, 7];
+const STYLE_LEVELS = [1, 7];
 const NUM_TRIALS = 4;
 
 // Q1 claims (updated with "Based on the chart")
@@ -538,7 +538,7 @@ export default function Exp2Survey() {
   const [nfcTotalTime, setNfcTotalTime] = useState(0);
   const [submitError, setSubmitError] = useState(null);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYcHlbuchDlyXWELzuhqkxrB0Iy2p3trT0bSJgdyE0mU33z8hK3rbFWe6UHRjK-06c/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDWTXuzfYMzt0Bnz21wJqznazh5LGpSTztWmuFDteLGF0NwcfYf9_NMcJ7KPlNQy9/exec";
 
   const inputStyle = {
     display: "block", width: "100%", marginTop: 8,
