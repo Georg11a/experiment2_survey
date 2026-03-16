@@ -906,7 +906,7 @@ export default function Exp2Survey() {
                       const copy = [...q2Answers]; copy[trialIdx] = String(n); setQ2Answers(copy);
                     }}
                     style={{
-                      width: 24, height: 24, accentColor: "#c53030",
+                      width: 24, height: 24, accentColor: "#2a8fc1",
                       cursor: "pointer",
                     }} />
                 </label>
