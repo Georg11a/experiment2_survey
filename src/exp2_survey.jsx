@@ -550,7 +550,7 @@ export default function Exp2Survey() {
   // NFC attention check (between items 13-14)
   const [nfcAttentionAnswer, setNfcAttentionAnswer] = useState(null);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcDWTXuzfYMzt0Bnz21wJqznazh5LGpSTztWmuFDteLGF0NwcfYf9_NMcJ7KPlNQy9/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGsJbZjQvvhccDiL7bDRE0MIIV216y31UJxCz2YaeV-CugWw3nYO6g_fgW3kfybo8W/exec";
 
   const inputStyle = {
     display: "block", width: "100%", marginTop: 8,
