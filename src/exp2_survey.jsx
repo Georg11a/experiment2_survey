@@ -317,10 +317,12 @@ function VlatQuestion({ item, index, total, onAnswer, onTimeout }) {
   const [answered, setAnswered] = useState(false);
   const [modalSrc, setModalSrc] = useState(null);
   const timerRef = useRef(null);
+  const selectedRef = useRef(null);
   const imgBase = `${import.meta.env.BASE_URL}images/`;
 
   useEffect(() => {
     setSelected(null);
+    selectedRef.current = null;
     setTimeLeft(25);
     setAnswered(false);
     timerRef.current = setInterval(() => {
@@ -338,13 +340,19 @@ function VlatQuestion({ item, index, total, onAnswer, onTimeout }) {
   useEffect(() => {
     if (timeLeft === 0 && !answered) {
       setAnswered(true);
-      onTimeout();
+      // If user selected something, use that; otherwise timeout
+      if (selectedRef.current) {
+        onAnswer(selectedRef.current);
+      } else {
+        onTimeout();
+      }
     }
   }, [timeLeft, answered]);
 
   const handleSelect = (val) => {
     if (answered) return;
     setSelected(val);
+    selectedRef.current = val;
   };
 
   const handleSubmit = () => {
@@ -392,8 +400,7 @@ function VlatQuestion({ item, index, total, onAnswer, onTimeout }) {
       }}>
         <img src={`${imgBase}${item.image}`} alt={`VLAT ${item.type}`}
           onClick={() => setModalSrc(`${imgBase}${item.image}`)}
-          style={{ maxWidth: "100%", maxHeight: 360, borderRadius: 6, cursor: "pointer" }} />
-        <div style={{ fontSize: 12, color: "#a0aec0", marginTop: 6 }}>Click the image to enlarge</div>
+          style={{ maxWidth: "100%", borderRadius: 6, cursor: "pointer" }} />
       </div>
 
       {/* Question */}
@@ -431,7 +438,7 @@ function VlatQuestion({ item, index, total, onAnswer, onTimeout }) {
             padding: "8px 24px", borderRadius: 6, border: "none",
             background: !selected ? "#a0aec0" : "#2a8fc1", color: "#fff",
             fontSize: 14, fontWeight: 600, cursor: !selected ? "not-allowed" : "pointer",
-          }}>Confirm</button>
+          }}>Next →</button>
         </div>
       )}
     </div>
@@ -1152,8 +1159,8 @@ export default function Exp2Survey() {
                 <strong>Instructions:</strong><br />
                 • There are <strong>12 questions</strong>, each with a 25-second time limit.<br />
                 • You will get +1 point for every correct answer.<br />
-                • There is <strong>no penalty</strong> for incorrect or skipped answers.<br />
-                • If you are unsure of the answer, you may skip it.
+                • There is <strong>no penalty</strong> for incorrect answers.<br />
+                • If time runs out, your current selection (if any) will be recorded automatically.
               </p>
             </div>
             <Nav showBack={false} onNext={() => setVlatStarted(true)} nextLabel="Start Quiz →" />
@@ -1204,7 +1211,7 @@ export default function Exp2Survey() {
               Visualization Literacy Quiz
             </h2>
             <p style={{ color: "#718096", fontSize: 14, margin: 0 }}>
-              You have <strong>25 seconds</strong> per question. If unsure, skip it. There is no penalty for incorrect or skipped answers.
+              You have <strong>25 seconds</strong> per question. Select an answer and click Next. If time runs out, your current selection will be saved.
             </p>
           </div>
 
