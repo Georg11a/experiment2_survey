@@ -400,7 +400,7 @@ function VlatQuestion({ item, index, total, onAnswer, onTimeout }) {
       }}>
         <img src={`${imgBase}${item.image}`} alt={`VLAT ${item.type}`}
           onClick={() => setModalSrc(`${imgBase}${item.image}`)}
-          style={{ maxWidth: "100%", borderRadius: 6, cursor: "pointer" }} />
+          style={{ maxWidth: "100%", maxHeight: 480, borderRadius: 6, cursor: "pointer" }} />
       </div>
 
       {/* Question */}
