@@ -741,7 +741,7 @@ export default function Exp2Survey() {
             </p>
           </div>
           <div style={{ color: "#6b7a8d", fontSize: 15, lineHeight: 1.75 }}>
-            <p>After completing all 4 rounds, you will answer a short visualization literacy quiz and a few background questions. Most participants complete the study in about <strong>15–25 minutes</strong>. In most cases, the study should be finished within 30 minutes. <strong>Going beyond 30 minutes may increase the risk of timing out.</strong></p>
+            <p>After completing all 4 rounds, you will answer a short visualization literacy quiz and a few background questions. Most participants complete the study in about <strong>15–18 minutes</strong>. In most cases, the study should be finished within 25 minutes. <strong>Going beyond 30 minutes may increase the risk of timing out.</strong></p>
           </div>
           <Nav showBack={false} onNext={() => { next(); }} nextLabel="Begin →" />
         </div>
