@@ -1341,7 +1341,7 @@ export default function Exp2Survey() {
   const attnCheck2Pass = nfcAttentionAnswer === 1;
   const allAttentionChecksPassed = attnCheck1Pass && attnCheck2Pass;
 
-  const prolificCode = allAttentionChecksPassed ? "C187R8XN" : "C1HC2W9Q";
+  const prolificCode = allAttentionChecksPassed ? "C187R8XN" : "C16IDP5F";
   const prolificUrl = `https://app.prolific.com/submissions/complete?cc=${prolificCode}`;
 
   return (
