@@ -183,15 +183,15 @@ function Page({ children }) {
 function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage, children }) {
   return (
     <div style={{
-      maxWidth: 1200, margin: "0 auto", padding: "40px 24px",
+      maxWidth: 1400, margin: "0 auto", padding: "40px 24px",
       fontFamily: "'Source Sans 3', 'Segoe UI', system-ui, sans-serif",
     }}>
       <ImageModal src={modalImage} onClose={() => setModalImage(null)} />
       <ProgressBar trialIdx={trialIdx} pageLabel={pageLabel} />
       <div style={{ display: "flex", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
-        {/* Left: Chart image — sticky */}
+        {/* Left: Chart image — sticky, 68% */}
         <div style={{
-          flex: "0 0 36%", minWidth: 300, position: "sticky", top: 24,
+          flex: "0 0 66%", minWidth: 400, position: "sticky", top: 24,
           textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 16,
           border: "1px solid #e2e8f0", alignSelf: "flex-start",
         }}>
@@ -200,8 +200,8 @@ function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage
             style={{ maxWidth: "100%", borderRadius: 6, cursor: "pointer" }} />
           <div style={{ fontSize: 12, color: "#a0aec0", marginTop: 8 }}>Click the image to enlarge</div>
         </div>
-        {/* Right: Questions */}
-        <div style={{ flex: "1 1 0", minWidth: 320 }}>
+        {/* Right: Questions — ~32% */}
+        <div style={{ flex: "1 1 0", minWidth: 280 }}>
           {children}
         </div>
       </div>
