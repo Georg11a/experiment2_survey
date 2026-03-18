@@ -26,7 +26,7 @@ const Q2_CONFIG = {
     question: "How much did Japan’s GDP per capita increase from 2010 to 2024?",
   },
   pie: {
-    question: "How much larger or smaller is Transport’s share compared to Energy?",
+    question: "How much larger or smaller is Transport’s share compared to Industry?",
   },
   bubble: {
     question: "How much larger is Bruno Mars’s monthly audience than Ed Sheeran’s?",
@@ -38,7 +38,7 @@ const TRUST_STATEMENTS = [
   "I find this visualization easy to understand.",
   "I find this visualization difficult to use.",
   "I am skeptical about the information presented in this visualization.",
-  "I trust this data.",
+  "I trust this data visualization.",
 ];
 const LIKERT_LABELS = [
   "Strongly Disagree", "Disagree", "Slightly Disagree",
@@ -933,6 +933,9 @@ export default function Exp2Survey() {
               background: "#fff", borderRadius: 12, padding: "28px 32px",
               boxShadow: "0 1px 4px rgba(0,0,0,.06)", border: "1px solid #e8ecf1", marginTop: 20,
             }}>
+              <div style={{ fontSize: 12, color: "#718096", fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>
+                [Attention check question]
+              </div>
               <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 16 }}>
                 Please select <strong>{attentionCheckTarget}</strong> on the scale below. <span style={{ color: "#e53e3e" }}>*</span>
               </label>
@@ -1274,7 +1277,7 @@ export default function Exp2Survey() {
             </label>
             <div style={{ marginTop: 8 }}>
               <RadioGroup name="education"
-                options={["High School Diploma / GED", "Associate Degree", "Bachelors Degree", "Masters Degree", "Doctorate Degree"]}
+                options={["Below High School", "High School Diploma / GED", "Associate Degree", "Bachelors Degree", "Masters Degree", "Doctorate Degree"]}
                 value={education} onChange={setEducation} />
             </div>
           </div>
