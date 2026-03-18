@@ -5,7 +5,7 @@ import React, { useState, useCallback, useMemo, useEffect, useRef } from "react"
 // ═══════════════════════════════════════════════════════════
 
 const TECHNIQUES = ["bar", "line", "pie", "bubble"];
-const STYLE_LEVELS = [1, 7];
+const STYLE_LEVELS = [1, 4, 7];
 const NUM_TRIALS = 4;
 
 // Q1 claims (updated with "Based on the chart")
@@ -1348,12 +1348,19 @@ export default function Exp2Survey() {
     <Page>
       <div style={{ textAlign: "center", paddingTop: 60, maxWidth: 540, margin: "0 auto" }}>
         <div style={{
-          width: 72, height: 72, borderRadius: "50%", background: "#e8f8ee",
+          width: 72, height: 72, borderRadius: "50%",
+          background: allAttentionChecksPassed ? "#e8f8ee" : "#fed7d7",
           display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px",
         }}>
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#38a169" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20 6L9 17l-5-5" />
-          </svg>
+          {allAttentionChecksPassed ? (
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#38a169" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          ) : (
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          )}
         </div>
         <h1 style={{ fontSize: 28, fontWeight: 700, color: "#1a202c", margin: "0 0 12px" }}>
           Thank you for your participation!
