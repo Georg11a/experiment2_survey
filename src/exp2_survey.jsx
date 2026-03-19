@@ -229,7 +229,7 @@ function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage
                 borderRadius: 6, cursor: "pointer",
               }} />
           )}
-          <div style={{ fontSize: 13, color: "#d69e2e", fontWeight: 600, padding: "4px 0" }}>Click the image to enlarge</div>
+          <div style={{ fontSize: 13, color: "#2a8fc1", fontWeight: 600, padding: "4px 0" }}>Click the image to enlarge</div>
         </div>
         {/* Right: Questions — remaining ~43% */}
         <div style={{ flex: "1 1 0", minWidth: 260 }}>
