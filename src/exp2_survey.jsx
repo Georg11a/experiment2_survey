@@ -183,25 +183,31 @@ function Page({ children }) {
 function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage, children }) {
   return (
     <div style={{
-      maxWidth: 1400, margin: "0 auto", padding: "40px 24px",
+      margin: "0 auto", padding: "20px 24px",
       fontFamily: "'Source Sans 3', 'Segoe UI', system-ui, sans-serif",
     }}>
       <ImageModal src={modalImage} onClose={() => setModalImage(null)} />
       <ProgressBar trialIdx={trialIdx} pageLabel={pageLabel} />
       <div style={{ display: "flex", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
-        {/* Left: Chart image — sticky, takes all remaining space */}
+        {/* Left: Chart image — fits within viewport height */}
         <div style={{
-          flex: "1 1 0", minWidth: 400, position: "sticky", top: 24,
-          textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 16,
+          flexShrink: 0, position: "sticky", top: 20,
+          textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 12,
           border: "1px solid #e2e8f0", alignSelf: "flex-start",
         }}>
           <img src={imagePath} alt="Data visualization"
             onClick={() => setModalImage(imagePath)}
-            style={{ maxWidth: "100%", borderRadius: 6, cursor: "pointer" }} />
-          <div style={{ fontSize: 12, color: "#a0aec0", marginTop: 8 }}>Click the image to enlarge</div>
+            style={{
+              display: "block",
+              maxHeight: "calc(100vh - 120px)",
+              width: "auto",
+              maxWidth: "min(100%, calc(100vw - 440px))",
+              borderRadius: 6, cursor: "pointer",
+            }} />
+          <div style={{ fontSize: 12, color: "#a0aec0", marginTop: 6 }}>Click the image to enlarge</div>
         </div>
-        {/* Right: Questions — fixed 320px */}
-        <div style={{ flex: "0 0 320px", minWidth: 280 }}>
+        {/* Right: Questions — takes remaining space, min 320px */}
+        <div style={{ flex: "1 1 320px", minWidth: 320 }}>
           {children}
         </div>
       </div>
