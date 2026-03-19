@@ -1266,7 +1266,7 @@ export default function Exp2Survey() {
 
   // ── STEP 17: Demographics (About You) ──
   if (step === 17) {
-    const canProceed = age && gender && education && colorVision && nativeLang && (nativeLang !== "Other" || otherLang.trim());
+    const canProceed = age && gender && education && colorVision;
 
     return (
       <Page>
@@ -1322,25 +1322,6 @@ export default function Exp2Survey() {
                 "Prefer not to say",
               ]} value={colorVision} onChange={setColorVision} />
             </div>
-          </div>
-
-          {/* Native Language */}
-          <div style={{ marginBottom: 28 }}>
-            <label style={{ fontWeight: 600, color: "#2d3748", fontSize: 15 }}>
-              What is your native language? <span style={{ color: "#e53e3e" }}>*</span>
-            </label>
-            <select value={nativeLang} onChange={(e) => setNativeLang(e.target.value)} style={{ ...inputStyle, background: "#fff" }}>
-              <option value="">Select...</option>
-              <option value="English">English</option>
-              <option value="Other">Other</option>
-            </select>
-            {nativeLang === "Other" && (
-              <input type="text" placeholder="Please specify your native language"
-                value={otherLang} onChange={(e) => setOtherLang(e.target.value)}
-                style={{ ...inputStyle, marginTop: 10 }}
-                onFocus={(e) => (e.target.style.borderColor = "#2a8fc1")}
-                onBlur={(e) => (e.target.style.borderColor = "#cbd5e0")} />
-            )}
           </div>
 
           {/* Comments */}
