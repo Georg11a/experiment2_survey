@@ -1152,56 +1152,12 @@ export default function Exp2Survey() {
     }
   }
 
-  // ── STEP 15: NFC-18 (own page) ──
+  // ── STEP 15: NFC-18 (SKIPPED — auto advance) ──
   if (step === 15) {
-    if (!nfcStartTime) setNfcStartTime(Date.now());
-    const nfcAllFilled = nfcAnswers.every((v) => v !== null);
-
-    return (
-      <div style={{
-        maxWidth: 1200, margin: "0 auto", padding: "40px 24px",
-        fontFamily: "'Source Sans 3', 'Segoe UI', system-ui, sans-serif",
-      }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a202c", margin: "0 0 6px" }}>Need for Cognition Scale</h2>
-          <p style={{ color: "#718096", fontSize: 15, margin: "0 0 32px" }}>
-            For each statement below, please indicate how characteristic it is of you. <span style={{ color: "#e53e3e" }}>*</span>
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            {NFC_ITEMS.map((item, idx) => (
-              <div key={idx}>
-                <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>{idx + 1}. {item}</div>
-                  <div style={{ display: "flex", gap: 6 }}>
-                    {NFC_SCALE.map((label, li) => (
-                      <label key={li} style={{
-                        flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 6, whiteSpace: "nowrap",
-                        background: nfcAnswers[idx] === li ? "#e8f4fb" : "#f7f8fa",
-                        border: nfcAnswers[idx] === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
-                        cursor: "pointer", fontSize: 13, lineHeight: 1.3,
-                        color: nfcAnswers[idx] === li ? "#2a8fc1" : "#4a5568",
-                        fontWeight: nfcAnswers[idx] === li ? 600 : 400, transition: "all .15s",
-                      }}>
-                        <input type="radio" name={`nfc_${idx}`} value={li}
-                          checked={nfcAnswers[idx] === li}
-                          onChange={() => { const c = [...nfcAnswers]; c[idx] = li; setNfcAnswers(c); }}
-                          style={{ display: "none" }} />
-                        {label}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-            ))}
-
-          </div>
-
-          <Nav onNext={() => {
-            if (nfcStartTime) setNfcTotalTime(Math.round((Date.now() - nfcStartTime) / 1000));
-            next();
-          }} nextLabel="Continue →" nextDisabled={!nfcAllFilled} />
-        </div>
-      </div>
-    );
+    next();
+    return null;
   }
+
 
   // ── STEP 16: Mini-VLAT ──
   if (step === 16) {
