@@ -192,18 +192,18 @@ function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage
         {/* Left: Chart image — 60%, fits viewport height */}
         <div style={{
           flex: "0 0 60%", minWidth: 400, position: "sticky", top: 20,
-          textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 12,
+          textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 6,
           border: "1px solid #e2e8f0", alignSelf: "flex-start",
         }}>
           <img src={imagePath} alt="Data visualization"
             onClick={() => setModalImage(imagePath)}
             style={{
               display: "block", margin: "0 auto",
-              maxHeight: "calc(100vh - 120px)",
+              maxHeight: "calc(100vh - 100px)",
               maxWidth: "100%",
               borderRadius: 6, cursor: "pointer",
             }} />
-          <div style={{ fontSize: 12, color: "#a0aec0", marginTop: 6 }}>Click the image to enlarge</div>
+          <div style={{ fontSize: 11, color: "#a0aec0", marginTop: 4 }}>Click the image to enlarge</div>
         </div>
         {/* Right: Questions — remaining ~38% */}
         <div style={{ flex: "1 1 0", minWidth: 280 }}>
