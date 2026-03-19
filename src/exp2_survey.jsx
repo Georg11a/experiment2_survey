@@ -193,7 +193,7 @@ function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
         {/* Left: Chart image — 65%, fits viewport height */}
         <div style={{
-          flex: "0 0 65%", minWidth: 280, position: "sticky", top: 20,
+          flex: "0 0 60%", minWidth: 280, position: "sticky", top: 20,
           textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 0,
           border: "1px solid #e2e8f0", alignSelf: "flex-start", overflow: "hidden",
         }}>
@@ -202,7 +202,8 @@ function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage
             style={{
               display: "block", margin: "0 auto",
               maxHeight: "calc(100vh - 100px)",
-              maxWidth: "100%",
+              width: "110%", maxWidth: "110%",
+              marginLeft: "-5%",
               borderRadius: 6, cursor: "pointer",
             }} />
           <div style={{ fontSize: 11, color: "#a0aec0", padding: "4px 0" }}>Click the image to enlarge</div>
