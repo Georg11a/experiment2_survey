@@ -192,7 +192,7 @@ function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage
         {/* Left: Chart image — 60%, fits viewport height */}
         <div style={{
           flex: "0 0 60%", minWidth: 400, position: "sticky", top: 20,
-          textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 6,
+          textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 4,
           border: "1px solid #e2e8f0", alignSelf: "flex-start",
         }}>
           <img src={imagePath} alt="Data visualization"
