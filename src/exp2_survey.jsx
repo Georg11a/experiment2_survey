@@ -193,7 +193,7 @@ function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
         {/* Left: Chart image — 65%, fits viewport height */}
         <div style={{
-          flex: "0 0 65%", minWidth: 280, position: "sticky", top: 20,
+          flex: "0 0 55%", minWidth: 280, position: "sticky", top: 20,
           textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 0,
           border: "1px solid #e2e8f0", alignSelf: "flex-start", overflow: "hidden",
         }}>
@@ -267,10 +267,10 @@ function LikertRow({ statement, name, value, onChange }) {
         {LIKERT_LABELS.map((label, li) => (
           <label key={li} style={{
             flex: "1 1 0", textAlign: "center",
-            padding: "6px 2px", borderRadius: 5,
+            padding: "8px 3px", borderRadius: 5,
             background: value === li ? "#e8f4fb" : "#f7f8fa",
             border: value === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
-            cursor: "pointer", fontSize: 10, lineHeight: 1.2,
+            cursor: "pointer", fontSize: 11, lineHeight: 1.3,
             color: value === li ? "#2a8fc1" : "#4a5568",
             fontWeight: value === li ? 600 : 400, transition: "all .15s",
           }}>
