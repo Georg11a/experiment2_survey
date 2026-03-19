@@ -183,17 +183,19 @@ function Page({ children }) {
 function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage, children }) {
   return (
     <div style={{
-      margin: "0 auto", padding: "20px 24px",
+      margin: "0 auto", padding: "20px 8px",
       fontFamily: "'Source Sans 3', 'Segoe UI', system-ui, sans-serif",
     }}>
       <ImageModal src={modalImage} onClose={() => setModalImage(null)} />
-      <ProgressBar trialIdx={trialIdx} pageLabel={pageLabel} />
-      <div style={{ display: "flex", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
-        {/* Left: Chart image — 60%, fits viewport height */}
+      <div style={{ padding: "0 16px" }}>
+        <ProgressBar trialIdx={trialIdx} pageLabel={pageLabel} />
+      </div>
+      <div style={{ display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
+        {/* Left: Chart image — 65%, fits viewport height */}
         <div style={{
-          flex: "0 0 60%", minWidth: 400, position: "sticky", top: 20,
+          flex: "0 0 65%", minWidth: 400, position: "sticky", top: 20,
           textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 0,
-          border: "1px solid #e2e8f0", alignSelf: "flex-start",
+          border: "1px solid #e2e8f0", alignSelf: "flex-start", overflow: "hidden",
         }}>
           <img src={imagePath} alt="Data visualization"
             onClick={() => setModalImage(imagePath)}
@@ -203,10 +205,10 @@ function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage
               maxWidth: "100%",
               borderRadius: 6, cursor: "pointer",
             }} />
-          <div style={{ fontSize: 11, color: "#a0aec0", marginTop: 4 }}>Click the image to enlarge</div>
+          <div style={{ fontSize: 11, color: "#a0aec0", padding: "4px 0" }}>Click the image to enlarge</div>
         </div>
-        {/* Right: Questions — remaining ~38% */}
-        <div style={{ flex: "1 1 0", minWidth: 280 }}>
+        {/* Right: Questions — remaining ~33% */}
+        <div style={{ flex: "1 1 0", minWidth: 260 }}>
           {children}
         </div>
       </div>
@@ -260,15 +262,15 @@ function RadioGroup({ name, options, value, onChange }) {
 function LikertRow({ statement, name, value, onChange }) {
   return (
     <div style={{ marginBottom: 18 }}>
-      <div style={{ fontSize: 14, color: "#2d3748", fontWeight: 600, marginBottom: 8 }}>{statement}</div>
-      <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+      <div style={{ fontSize: 13, color: "#2d3748", fontWeight: 600, marginBottom: 6 }}>{statement}</div>
+      <div style={{ display: "flex", gap: 3, flexWrap: "nowrap" }}>
         {LIKERT_LABELS.map((label, li) => (
           <label key={li} style={{
-            flex: "1 1 0", minWidth: 80, textAlign: "center",
-            padding: "8px 4px", borderRadius: 6,
+            flex: "1 1 0", textAlign: "center",
+            padding: "6px 2px", borderRadius: 5,
             background: value === li ? "#e8f4fb" : "#f7f8fa",
             border: value === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
-            cursor: "pointer", fontSize: 12, lineHeight: 1.3,
+            cursor: "pointer", fontSize: 10, lineHeight: 1.2,
             color: value === li ? "#2a8fc1" : "#4a5568",
             fontWeight: value === li ? 600 : 400, transition: "all .15s",
           }}>
