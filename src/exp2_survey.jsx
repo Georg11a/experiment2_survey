@@ -183,17 +183,17 @@ function Page({ children }) {
 function TrialLayout({ trialIdx, pageLabel, imagePath, modalImage, setModalImage, children }) {
   return (
     <div style={{
-      margin: "0 auto", padding: "20px 8px",
+      margin: "0 auto", padding: "20px 0",
       fontFamily: "'Source Sans 3', 'Segoe UI', system-ui, sans-serif",
     }}>
       <ImageModal src={modalImage} onClose={() => setModalImage(null)} />
-      <div style={{ padding: "0 16px" }}>
+      <div style={{ padding: "0 8px" }}>
         <ProgressBar trialIdx={trialIdx} pageLabel={pageLabel} />
       </div>
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
         {/* Left: Chart image — 65%, fits viewport height */}
         <div style={{
-          flex: "0 0 65%", minWidth: 400, position: "sticky", top: 20,
+          flex: "0 0 65%", minWidth: 280, position: "sticky", top: 20,
           textAlign: "center", background: "#fafbfc", borderRadius: 10, padding: 0,
           border: "1px solid #e2e8f0", alignSelf: "flex-start", overflow: "hidden",
         }}>
