@@ -615,10 +615,13 @@ export default function Exp2Survey() {
   const attentionCheckTarget = useMemo(() => Math.floor(Math.random() * 6) + 1, []);
   const [attentionCheckAnswer, setAttentionCheckAnswer] = useState(null);
 
-  // NFC attention check (between items 13-14)
+  // NFC attention check (between items 13-14) — REMOVED FROM NFC, now unused but kept for data compat
   const [nfcAttentionAnswer, setNfcAttentionAnswer] = useState(null);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGsJbZjQvvhccDiL7bDRE0MIIV216y31UJxCz2YaeV-CugWw3nYO6g_fgW3kfybo8W/exec";
+  // Trust attention check (Round 2 Page 3, after "I trust this data visualization")
+  const [trustAttentionAnswer, setTrustAttentionAnswer] = useState(null);
+
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXIrBtFq2rgIeZ7pCpS8sGkijZkB7HewmPY9m-Gc6QcjgMQKr_BQ80uCn2gFxGdMBu/exec";
 
   const inputStyle = {
     display: "block", width: "100%", marginTop: 8,
@@ -672,6 +675,8 @@ export default function Exp2Survey() {
       nfcTotalTime,
       nfcAttentionAnswer: nfcAttentionAnswer !== null ? NFC_SCALE[nfcAttentionAnswer] : "",
       nfcAttentionCorrect: nfcAttentionAnswer === 1 ? "Yes" : "No",
+      trustAttentionAnswer: trustAttentionAnswer !== null ? LIKERT_LABELS[trustAttentionAnswer] : "",
+      trustAttentionCorrect: trustAttentionAnswer === 2 ? "Yes" : "No",
       attentionCheckTarget,
       attentionCheckAnswer: attentionCheckAnswer || "",
       attentionCheckCorrect: attentionCheckAnswer === String(attentionCheckTarget) ? "Yes" : "No",
@@ -681,7 +686,7 @@ export default function Exp2Survey() {
   }, [prolificId, styleLevel, integrityPatternIdx, techniqueOrder, getIntegrity, getImagePath,
       q1Answers, q2Answers, trustInventory, q4Reflection, q5Positive, q5Negative,
       pageTimes, age, gender, education, colorVision, nativeLang, otherLang, comments, nfcAnswers, nfcTotalTime,
-      nfcAttentionAnswer, attentionCheckTarget, attentionCheckAnswer, vlatOrder, vlatAnswers]);
+      nfcAttentionAnswer, attentionCheckTarget, attentionCheckAnswer, trustAttentionAnswer, vlatOrder, vlatAnswers]);
 
   const submitToGoogle = async () => {
     setSubmitting(true); setSubmitError(null);
@@ -802,7 +807,7 @@ export default function Exp2Survey() {
             </p>
           </div>
           <div style={{ color: "#6b7a8d", fontSize: 15, lineHeight: 1.75 }}>
-            <p>After completing all 4 rounds, you will answer a short visualization literacy quiz and a few background questions. Most participants complete the study in about <strong>15–18 minutes</strong>. In most cases, the study should be finished within 25 minutes. <strong>Going beyond 30 minutes may increase the risk of timing out.</strong></p>
+            <p>After completing all 4 rounds, you will answer a short visualization literacy quiz and a few background questions. Most participants complete the study in about <strong>10–15 minutes</strong>. In most cases, the study should be finished within 20 minutes. <strong>Going beyond 25 minutes may increase the risk of timing out.</strong></p>
           </div>
           <Nav showBack={false} onNext={() => { next(); }} nextLabel="Begin →" />
         </div>
@@ -1032,7 +1037,7 @@ export default function Exp2Survey() {
       const trustVals = trustInventory[trialIdx];
       const allTrustFilled = trustVals.every((v) => v !== null);
       const reflectionFilled = q4Reflection[trialIdx].trim().length > 0;
-      const canProceed = allTrustFilled && reflectionFilled;
+      const canProceed = allTrustFilled && reflectionFilled && (trialIdx !== 1 || trustAttentionAnswer !== null);
 
       return (
         <TrialLayout trialIdx={trialIdx} pageLabel="Page 3 of 3" imagePath={imagePath}
@@ -1058,6 +1063,37 @@ export default function Exp2Survey() {
                     copy[trialIdx][si] = val; setTrustInventory(copy);
                   }} />
               ))}
+
+              {/* Attention check — only on Round 2 Page 3 */}
+              {trialIdx === 1 && (
+                <div style={{ marginBottom: 18 }}>
+                  <div style={{ fontSize: 12, color: "#718096", fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 }}>
+                    [Attention check]
+                  </div>
+                  <div style={{ fontSize: 13, color: "#2d3748", fontWeight: 600, marginBottom: 6 }}>
+                    Please select "Slightly Disagree". <span style={{ color: "#e53e3e" }}>*</span>
+                  </div>
+                  <div style={{ display: "flex", gap: 3, flexWrap: "nowrap" }}>
+                    {LIKERT_LABELS.map((label, li) => (
+                      <label key={li} style={{
+                        flex: "1 1 0", textAlign: "center",
+                        padding: "8px 3px", borderRadius: 5,
+                        background: trustAttentionAnswer === li ? "#e8f4fb" : "#f7f8fa",
+                        border: trustAttentionAnswer === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
+                        cursor: "pointer", fontSize: 11, lineHeight: 1.3,
+                        color: trustAttentionAnswer === li ? "#2a8fc1" : "#4a5568",
+                        fontWeight: trustAttentionAnswer === li ? 600 : 400, transition: "all .15s",
+                      }}>
+                        <input type="radio" name="trust_attention" value={li}
+                          checked={trustAttentionAnswer === li}
+                          onChange={() => setTrustAttentionAnswer(li)}
+                          style={{ display: "none" }} />
+                        {label}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Q4 */}
@@ -1119,7 +1155,7 @@ export default function Exp2Survey() {
   // ── STEP 15: NFC-18 (own page) ──
   if (step === 15) {
     if (!nfcStartTime) setNfcStartTime(Date.now());
-    const nfcAllFilled = nfcAnswers.every((v) => v !== null) && nfcAttentionAnswer !== null;
+    const nfcAllFilled = nfcAnswers.every((v) => v !== null);
 
     return (
       <div style={{
@@ -1133,35 +1169,8 @@ export default function Exp2Survey() {
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             {NFC_ITEMS.map((item, idx) => (
-              <React.Fragment key={idx}>
-                {/* Insert attention check between item 13 (idx=12) and item 14 (idx=13) */}
-                {idx === 13 && (
-                  <div>
-                    <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>
-                      Please select "Somewhat Uncharacteristic".
-                    </div>
-                    <div style={{ display: "flex", gap: 6 }}>
-                      {NFC_SCALE.map((label, li) => (
-                        <label key={li} style={{
-                          flex: 1, textAlign: "center", padding: "12px 6px", borderRadius: 6, whiteSpace: "nowrap",
-                          background: nfcAttentionAnswer === li ? "#e8f4fb" : "#f7f8fa",
-                          border: nfcAttentionAnswer === li ? "1px solid #2a8fc1" : "1px solid #e2e8f0",
-                          cursor: "pointer", fontSize: 13, lineHeight: 1.3,
-                          color: nfcAttentionAnswer === li ? "#2a8fc1" : "#4a5568",
-                          fontWeight: nfcAttentionAnswer === li ? 600 : 400, transition: "all .15s",
-                        }}>
-                          <input type="radio" name="nfc_attention" value={li}
-                            checked={nfcAttentionAnswer === li}
-                            onChange={() => setNfcAttentionAnswer(li)}
-                            style={{ display: "none" }} />
-                          {label}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                <div>
-                  <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>{idx + 1}. {item}</div>
+              <div key={idx}>
+                <div style={{ fontSize: 15, color: "#2d3748", marginBottom: 8, fontWeight: 600 }}>{idx + 1}. {item}</div>
                   <div style={{ display: "flex", gap: 6 }}>
                     {NFC_SCALE.map((label, li) => (
                       <label key={li} style={{
@@ -1181,8 +1190,8 @@ export default function Exp2Survey() {
                     ))}
                   </div>
                 </div>
-              </React.Fragment>
             ))}
+
           </div>
 
           <Nav onNext={() => {
@@ -1372,9 +1381,9 @@ export default function Exp2Survey() {
   // ── STEP 18: Thank You ──
   // Determine if attention checks passed:
   // 1. Round 4 Page 2 attention check: attentionCheckAnswer must equal attentionCheckTarget
-  // 2. NFC attention check: nfcAttentionAnswer must be 1 (index of "Somewhat Uncharacteristic")
+  // 2. Round 2 Page 3 trust attention check: trustAttentionAnswer must be 2 (index of "Slightly Disagree")
   const attnCheck1Pass = attentionCheckAnswer === String(attentionCheckTarget);
-  const attnCheck2Pass = nfcAttentionAnswer === 1;
+  const attnCheck2Pass = trustAttentionAnswer === 2;
   const allAttentionChecksPassed = attnCheck1Pass && attnCheck2Pass;
 
   const prolificCode = allAttentionChecksPassed ? "C187R8XN" : "C16IDP5F";
