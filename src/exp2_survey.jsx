@@ -307,7 +307,7 @@ function ImageModal({ src, onClose }) {
           display: "flex", alignItems: "center", justifyContent: "center",
           position: "sticky", top: 0,
         }}>✕</button>
-        <img src={src} alt="Enlarged chart" style={{ maxWidth: "100%", borderRadius: 6 }} />
+        <img src={src} alt="Enlarged chart" style={{ width: "85vw", maxWidth: "100%", borderRadius: 6 }} />
       </div>
     </div>
   );
