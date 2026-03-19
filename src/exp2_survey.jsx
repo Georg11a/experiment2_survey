@@ -1292,7 +1292,7 @@ export default function Exp2Survey() {
               Please select your gender. <span style={{ color: "#e53e3e" }}>*</span>
             </label>
             <div style={{ marginTop: 8 }}>
-              <RadioGroup name="gender" options={["Male", "Female", "Non-binary", "Prefer not to say"]}
+              <RadioGroup name="gender" options={["Man", "Woman", "Non-binary", "Prefer not to say"]}
                 value={gender} onChange={setGender} />
             </div>
           </div>
